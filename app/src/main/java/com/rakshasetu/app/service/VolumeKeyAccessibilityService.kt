@@ -50,7 +50,8 @@ class VolumeKeyAccessibilityService : AccessibilityService(), VolumeButtonDetect
     }
 
     override fun onVolumeComboDetected() {
-        // Launch countdown activity
+        // Launch countdown activity — will show over lock screen
+        // (CountdownActivity calls setShowWhenLocked(true) + setTurnScreenOn(true))
         val intent = Intent(this, CountdownActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION)
             putExtra(CountdownActivity.EXTRA_TRIGGER_TYPE, "volume")

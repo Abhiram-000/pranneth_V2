@@ -3,30 +3,32 @@ package com.rakshasetu.app.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.rakshasetu.app.data.repository.PreferencesRepository
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import android.util.Log
 
 /**
  * Restarts the shake detection service after device reboot.
  * This is critical for ensuring the app continues to work after restart.
  */
-@AndroidEntryPoint
 class BootReceiver : BroadcastReceiver() {
 
-    @Inject
-    lateinit var preferencesRepository: PreferencesRepository
-
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_BOOT_COMPLETED ||
-            intent.action == "android.intent.action.QUICKBOOT_POWERON" ||
-            intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
+        val action = intent.action
+        Log.d("BootReceiver", "Received broadcast: $action")
 
-            val prefs = preferencesRepository.currentPrefs
+        if (action == Intent.ACTION_BOOT_COMPLETED ||
+            action == "android.intent.action.QUICKBOOT_POWERON" ||
+            action == Intent.ACTION_MY_PACKAGE_REPLACED) {
 
-            // Only restart if onboarding is complete and service was active
-            if (prefs.isOnboardingComplete) {
+            // Use shared prefs directly — Hilt may not be available in boot receiver
+            val prefs = context.getSharedPreferences("rakshasetu_prefs", Context.MODE_PRIVATE)
+            val onboardingComplete = prefs.getBoolean("is_onboarding_complete", false)
+            val serviceEnabled = prefs.getBoolean("shake_detection_enabled", true)
+
+            if (onboardingComplete && serviceEnabled) {
+                Log.d("BootReceiver", "Restarting ShakeDetectionService after boot")
                 ShakeDetectionService.start(context)
+            } else {
+                Log.d("BootReceiver", "Skipping restart: onboarding=$onboardingComplete, service=$serviceEnabled")
             }
         }
     }

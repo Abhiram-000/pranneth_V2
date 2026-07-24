@@ -57,7 +57,10 @@ class OnboardingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (preferencesRepository.currentPrefs.isOnboardingComplete) {
-            startActivity(Intent(this, MainActivity::class.java))
+            // Skip directly to main — no visible redirect
+            startActivity(Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            })
             finish()
             return
         }
@@ -199,7 +202,9 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun completeOnboarding() {
         preferencesRepository.completeOnboarding()
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        })
         finish()
     }
 }

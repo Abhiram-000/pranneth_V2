@@ -44,6 +44,12 @@
     <!-- Overlay for countdown screen over lock screen -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <!-- Full screen intent for lock screen alerts (Android 14+) -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+
+    <!-- Disable battery optimization -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
     <application
         android:name=".RakshaSetuApp"
         android:allowBackup="true"
@@ -70,7 +76,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="false"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.RakshaSetu" />
 
         <activity
@@ -89,6 +95,7 @@
             android:showOnLockScreen="true"
             android:turnScreenOn="true"
             android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.RakshaSetu.Countdown" />
 
         <activity

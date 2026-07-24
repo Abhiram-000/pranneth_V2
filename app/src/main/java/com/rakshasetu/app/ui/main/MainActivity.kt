@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     @Inject lateinit var preferencesRepository: PreferencesRepository
 
     private lateinit var binding: ActivityMainBinding
+    private var isServiceStarted = false
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -195,6 +196,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startSafetyService() {
+        if (isServiceStarted) return // Prevent duplicate service starts
+        isServiceStarted = true
         ShakeDetectionService.start(this)
         updateServiceStatus()
     }

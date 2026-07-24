@@ -87,6 +87,19 @@ class ShakeDetectionService : Service(), ShakeDetector.ShakeListener {
     private fun startDetection() {
         shakeDetector.reset()
         shakeDetector.start(sensorManager)
+
+        // Renew WakeLock every 50 minutes to keep service alive 24/7
+        serviceScope.launch {
+            while (isActive) {
+                delay(50 * 60 * 1000L) // 50 minutes
+                wakeLock?.let {
+                    if (it.isHeld) {
+                        it.release()
+                        acquireWakeLock()
+                    }
+                }
+            }
+        }
     }
 
     private fun stopDetection() {
@@ -96,7 +109,8 @@ class ShakeDetectionService : Service(), ShakeDetector.ShakeListener {
     override fun onShakeDetected(eventCount: Int) {
         if (isCooldownActive) return
 
-        // Launch countdown activity
+        // Launch countdown activity — will show over lock screen
+        // (CountdownActivity calls setShowWhenLocked(true) + setTurnScreenOn(true))
         val intent = Intent(this, CountdownActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION)
             putExtra(CountdownActivity.EXTRA_TRIGGER_TYPE, "shake")
@@ -115,8 +129,9 @@ class ShakeDetectionService : Service(), ShakeDetector.ShakeListener {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // SOS quick-action button in notification
+        // SOS quick-action button in notification (works from lock screen)
         val sosIntent = Intent(this, CountdownActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             putExtra(CountdownActivity.EXTRA_TRIGGER_TYPE, "notification")
         }
         val sosPendingIntent = PendingIntent.getActivity(
@@ -151,6 +166,18 @@ class ShakeDetectionService : Service(), ShakeDetector.ShakeListener {
         serviceScope.cancel()
         wakeLock?.let { if (it.isHeld) it.release() }
         super.onDestroy()
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        // Auto-restart when removed from recents — keeps service alive 24/7
+        val prefs = preferencesRepository.currentPrefs
+        if (prefs.isOnboardingComplete) {
+            val restartIntent = Intent(this, ShakeDetectionService::class.java).apply {
+                action = ACTION_START
+            }
+            startForegroundService(restartIntent)
+        }
+        super.onTaskRemoved(rootIntent)
     }
 
     companion object {

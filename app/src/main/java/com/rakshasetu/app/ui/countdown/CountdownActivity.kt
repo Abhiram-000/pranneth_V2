@@ -70,6 +70,10 @@ class CountdownActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Lock screen support — show over lock screen and wake device
+        setShowWhenLocked(true)
+        setTurnScreenOn(true)
+
         binding = ActivityCountdownBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
