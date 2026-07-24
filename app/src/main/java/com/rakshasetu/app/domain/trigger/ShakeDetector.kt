@@ -13,16 +13,17 @@ import kotlin.math.sqrt
  * - Non-rhythmic check (filters running cadence)
  * - Configurable sensitivity
  * - Rolling window for multiple events
+ * - Fast sensor rate for screen-off reliability
  */
 class ShakeDetector(
-    private val listener: ShakeListener,
-    private val config: ShakeConfig = ShakeConfig()
+    private var listener: ShakeListener,
+    private var config: ShakeConfig = ShakeConfig()
 ) : SensorEventListener {
 
     data class ShakeConfig(
-        val threshold: Float = 12f,
-        val eventCount: Int = 3,
-        val windowMs: Long = 2000L,
+        val threshold: Float = 8f,          // Lowered from 12 for sensitivity
+        val eventCount: Int = 3,            // 3 shakes in window
+        val windowMs: Long = 1500L,         // Tightened from 2000
         val sensitivityMultiplier: Float = 1.0f
     ) {
         val effectiveThreshold: Float get() = threshold * sensitivityMultiplier
@@ -46,12 +47,13 @@ class ShakeDetector(
     fun start(sensorManager: SensorManager) {
         val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         if (accelerometer != null) {
-            // Use batched low-power mode for battery efficiency
+            // Use UI delay for fast response — critical for screen-off reliability
+            // maxReportLatencyUs = 0 means report immediately (no batching delay)
             sensorManager.registerListener(
                 this,
                 accelerometer,
-                SensorManager.SENSOR_DELAY_NORMAL,
-                100_000 // 100ms max report latency
+                SensorManager.SENSOR_DELAY_UI,
+                0 // Immediate reporting — no delay
             )
             isListening = true
         }
@@ -63,12 +65,9 @@ class ShakeDetector(
         reset()
     }
 
-    fun updateConfig(config: ShakeConfig) {
-        this.config_copy = config
+    fun updateConfig(newConfig: ShakeConfig) {
+        this.config = newConfig
     }
-
-    @Volatile
-    private var config_copy = config
 
     fun reset() {
         shakeTimestamps.clear()
@@ -77,6 +76,8 @@ class ShakeDetector(
         lastAcceleration = floatArrayOf(0f, 0f, 0f)
         lastMagnitude = 0f
     }
+
+    fun isListening() = isListening
 
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor.type != Sensor.TYPE_ACCELEROMETER) return
@@ -96,7 +97,7 @@ class ShakeDetector(
         // FALSE-POSITIVE DEFENSE 1: Multi-axis check
         // Require significant change across at least 2 axes (not just one big jolt)
         val axesWithSignificantChange = listOf(deltaX, deltaY, deltaZ).count {
-            it > config_copy.effectiveThreshold * 0.5f
+            it > config.effectiveThreshold * 0.4f
         }
         if (axesWithSignificantChange < 2) return
 
@@ -104,7 +105,7 @@ class ShakeDetector(
         val magnitude = sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ)
 
         // FALSE-POSITIVE DEFENSE 2: Threshold check
-        if (magnitude < config_copy.effectiveThreshold) return
+        if (magnitude < config.effectiveThreshold) return
 
         // FALSE-POSITIVE DEFENSE 3: Periodicity check (filters running/cycling cadence)
         if (lastPeakTimestamp > 0) {
@@ -124,10 +125,10 @@ class ShakeDetector(
         shakeTimestamps.add(currentTime)
 
         // Remove old timestamps outside the window
-        shakeTimestamps.removeAll { currentTime - it > config_copy.windowMs }
+        shakeTimestamps.removeAll { currentTime - it > config.windowMs }
 
         // Check if we have enough events in the window
-        if (shakeTimestamps.size >= config_copy.eventCount) {
+        if (shakeTimestamps.size >= config.eventCount) {
             listener.onShakeDetected(shakeTimestamps.size)
             shakeTimestamps.clear()
             recentIntervals.clear()

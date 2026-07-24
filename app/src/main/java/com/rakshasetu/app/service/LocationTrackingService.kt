@@ -48,7 +48,8 @@ class LocationTrackingService : Service(), LocationTracker.LocationEventListener
                 alertId = intent.getLongExtra(EXTRA_ALERT_ID, -1)
                 val prefs = preferencesRepository.currentPrefs
 
-                startForeground(NOTIFICATION_ID, createNotification())
+                startForeground(NOTIFICATION_ID, createNotification(),
+                    android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
                 locationTracker.startTracking(
                     intervalMs = prefs.locationUpdateIntervalMs,
                     durationMs = prefs.locationUpdateDurationMs
