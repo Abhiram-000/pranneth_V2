@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background">
+    android:background="@drawable/bg_gradient_dark">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/primary"
+        android:background="@android:color/transparent"
         app:title="Alert History"
-        app:titleTextColor="@android:color/white"
+        app:titleTextColor="@color/text_primary"
         app:navigationIcon="@drawable/ic_back"
-        app:navigationIconTint="@android:color/white" />
+        app:navigationIconTint="@color/text_glass" />
 
     <TextView
         android:id="@+id/tvEmpty"
@@ -22,6 +22,7 @@
         android:layout_height="match_parent"
         android:text="No alerts yet.\n\nYour emergency alert history will appear here."
         android:textSize="16sp"
+        android:textColor="@color/text_secondary"
         android:textAlignment="center"
         android:gravity="center"
         android:visibility="gone" />
@@ -32,5 +33,4 @@
         android:layout_height="match_parent"
         android:padding="16dp"
         android:clipToPadding="false" />
-
 </LinearLayout>

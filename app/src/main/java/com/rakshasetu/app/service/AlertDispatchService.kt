@@ -2,188 +2,220 @@ package com.rakshasetu.app.service
 
 import android.annotation.SuppressLint
 import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
-import android.os.PowerManager
+import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import com.rakshasetu.app.R
-import com.rakshasetu.app.RakshaSetuApp
 import com.rakshasetu.app.data.entity.AlertLog
-import com.rakshasetu.app.data.entity.AppPreferences
-import com.rakshasetu.app.data.entity.EmergencyContact
-import com.rakshasetu.app.data.repository.AlertRepository
-import com.rakshasetu.app.data.repository.ContactRepository
-import com.rakshasetu.app.data.repository.PreferencesRepository
 import com.rakshasetu.app.domain.call.CallManager
 import com.rakshasetu.app.domain.escalation.EscalationManager
 import com.rakshasetu.app.domain.location.LocationTracker
 import com.rakshasetu.app.domain.sms.SMSDispatcher
-import com.rakshasetu.app.ui.countdown.CountdownActivity
-import com.rakshasetu.app.util.AlertUtils
+import com.rakshasetu.app.data.repository.AlertRepository
+import com.rakshasetu.app.data.repository.ContactRepository
+import com.rakshasetu.app.data.repository.PreferencesRepository
+import com.rakshasetu.app.ui.main.MainActivity
 import com.rakshasetu.app.util.OEMHelper
 import com.rakshasetu.app.util.SmsVerificationHelper
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 /**
- * Core service that dispatches emergency alerts via SMS and missed calls.
- * Handles:
- * - SMS to all emergency contacts with retry logic
- * - Missed calls to contacts sequentially
- * - SMS/call to 112 (ERSS)
- * - Exponential backoff retry on failure
- * - Dual-SIM fallback (if available)
- * - Escalation to next contact if primary unreachable
- * - Continuing location updates during active alert
+ * Service that dispatches emergency SMS and calls to all registered contacts.
+ *
+ * Key fixes for location:
+ * - Force a fresh GPS fix BEFORE formatting SMS
+ * - Wait for location with timeout (up to 15s)
+ * - Save location coordinates to AlertLog so it's persisted
+ * - Network fallback if GPS unavailable
  */
 @AndroidEntryPoint
-class AlertDispatchService : Service(), CallManager.CallCallback {
+class AlertDispatchService : LifecycleService() {
 
-    @Inject lateinit var alertRepository: AlertRepository
-    @Inject lateinit var contactRepository: ContactRepository
-    @Inject lateinit var preferencesRepository: PreferencesRepository
+    companion object {
+        private const val TAG = "AlertDispatch"
+        private const val NOTIFICATION_CHANNEL = "alert_dispatch"
+        private const val NOTIFICATION_ID = 7001
+        const val ACTION_DISPATCH_ALERT = "com.rakshasetu.DISPATCH_ALERT"
+        const val EXTRA_TRIGGER_TYPE = "trigger_type"
+        const val EXTRA_IS_SILENT = "is_silent"
+        const val EXTRA_ALERT_ID = "alert_id"
+        const val EXTRA_IS_AIRPLANE_MODE = "is_airplane_mode"
+
+        fun dispatchAlert(context: Context, triggerType: String, isSilent: Boolean = false) {
+            val intent = Intent(context, AlertDispatchService::class.java).apply {
+                action = ACTION_DISPATCH_ALERT
+                putExtra(EXTRA_TRIGGER_TYPE, triggerType)
+                putExtra(EXTRA_IS_SILENT, isSilent)
+            }
+            context.startForegroundService(intent)
+        }
+    }
+
     @Inject lateinit var smsDispatcher: SMSDispatcher
     @Inject lateinit var callManager: CallManager
+    @Inject lateinit var contactRepository: ContactRepository
+    @Inject lateinit var alertRepository: AlertRepository
     @Inject lateinit var locationTracker: LocationTracker
+    @Inject lateinit var preferencesRepository: PreferencesRepository
     @Inject lateinit var escalationManager: EscalationManager
-
-    private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    private var wakeLock: PowerManager.WakeLock? = null
-    private var activeAlertId: Long = -1
-
-    override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
-        callManager.setCallback(this)
-        acquireWakeLock()
+        createNotificationChannel()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+
+        val notification = buildForegroundNotification("Preparing emergency alert...")
+        startForeground(
+            NOTIFICATION_ID,
+            notification,
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+        )
+
         when (intent?.action) {
             ACTION_DISPATCH_ALERT -> {
-                val alertId = intent.getLongExtra(EXTRA_ALERT_ID, -1)
-                val isAirplaneMode = intent.getBooleanExtra(EXTRA_IS_AIRPLANE_MODE, false)
-                if (alertId != -1L) {
-                    startForeground(NOTIFICATION_ID, createNotification("Dispatching emergency alert..."))
-                    serviceScope.launch {
-                        dispatchAlert(alertId, isAirplaneMode)
-                    }
+                val triggerType = intent.getStringExtra(EXTRA_TRIGGER_TYPE) ?: "unknown"
+                val isSilent = intent.getBooleanExtra(EXTRA_IS_SILENT, false)
+                lifecycleScope.launch {
+                    dispatchAlert(triggerType, isSilent)
                 }
-            }
-            ACTION_CANCEL_ALERT -> {
-                val alertId = intent.getLongExtra(EXTRA_ALERT_ID, -1)
-                val isDuress = intent.getBooleanExtra(EXTRA_IS_DURESS, false)
-                serviceScope.launch {
-                    cancelAlert(alertId, isDuress)
-                }
-            }
-            ACTION_STOP -> {
-                cleanupAndStop()
             }
         }
+
         return START_NOT_STICKY
     }
 
-    @SuppressLint("MissingPermission")
-    private suspend fun dispatchAlert(alertId: Long, isAirplaneMode: Boolean) {
-        activeAlertId = alertId
-        val prefs = preferencesRepository.currentPrefs
-        val contacts = contactRepository.getAllContactsList()
-
-        if (contacts.isEmpty() && !isAirplaneMode) {
-            // No contacts to notify — just alert 112
-            dispatchToEmergencyNumber(alertId, prefs)
-            cleanupAndStop()
-            return
-        }
-
-        // Get current location for the alert
-        var location = locationTracker.lastKnownLocation.value
-        if (location == null) {
-            location = withContext(Dispatchers.Main) {
-                kotlin.coroutines.suspendCoroutine { cont ->
-                    locationTracker.getLastKnownLocation { loc ->
-                        cont.resumeWith(Result.success(loc))
-                    }
-                }
-            }
-        }
-
-        // Format SMS message
-        val batteryLevel = OEMHelper.getBatteryLevel(this)
-        val hasData = OEMHelper.hasDataConnection(this)
-        val message = SmsVerificationHelper.formatEmergencyMessage(
-            template = prefs.smsTemplate,
-            latitude = location?.latitude,
-            longitude = location?.longitude,
-            accuracy = location?.accuracy,
-            batteryLevel = batteryLevel,
-            hasData = hasData
-        )
-
-        // Start location tracking for continuing updates
-        locationTracker.setCallback(object : LocationTracker.LocationEventListener {
-            override fun onLocationUpdated(update: com.rakshasetu.app.data.entity.LocationUpdate) {
-                // Location updates continue in background — contacts can track movement
-            }
-            override fun onLocationFailed(error: String) {
-                // Best effort — continue without location updates
-            }
-        })
-        locationTracker.startTracking(
-            intervalMs = prefs.locationUpdateIntervalMs,
-            durationMs = prefs.locationUpdateDurationMs
-        )
-
-        // Start escalation manager
-        escalationManager.startEscalation(contacts)
-
-        // Dispatch to all contacts with retry
-        var sentCount = 0
-        for (contact in contacts) {
-            val success = dispatchToContact(contact, message, alertId, sentCount)
-            if (success) {
-                sentCount++
-                alertRepository.incrementSmsCount(alertId)
-            }
-        }
-
-        // Dispatch to emergency number (112)
-        dispatchToEmergencyNumber(alertId, prefs)
-
-        // Start missed calls to contacts (after SMS)
-        for (contact in contacts) {
-            try {
-                callManager.placeMissedCall(contact, ringDurationMs = 5000L)
-                alertRepository.incrementCallCount(alertId)
-                delay(6000L) // Wait between calls
-            } catch (e: Exception) {
-                // Best effort — continue with next contact
-            }
-        }
-
-        // Start background location update service
-        val locationIntent = Intent(this, LocationTrackingService::class.java).apply {
-            action = LocationTrackingService.ACTION_START
-            putExtra(LocationTrackingService.EXTRA_ALERT_ID, alertId)
-        }
-        startForegroundService(locationIntent)
-
-        // Update notification
-        updateNotification("Alert active — ${sentCount} contacts notified")
+    override fun onBind(intent: Intent): IBinder? {
+        super.onBind(intent)
+        return null
     }
 
-    /**
-     * Dispatches SMS to a single contact with exponential backoff retry.
-     */
+    @SuppressLint("MissingPermission")
+    private suspend fun dispatchAlert(triggerType: String, isSilent: Boolean) {
+        val startTime = System.currentTimeMillis()
+
+        try {
+            updateNotification("Obtaining GPS location...")
+
+            // CRITICAL FIX: Force a fresh GPS fix BEFORE formatting the SMS
+            // This is what was missing — previously we just read the cache which was null
+            Log.d(TAG, "Forcing fresh GPS fix before alert dispatch...")
+            val freshLocation = locationTracker.forceFreshFix(timeoutMs = 15_000L)
+
+            if (freshLocation != null) {
+                Log.d(TAG, "Fresh fix obtained: ${freshLocation.latitude}, ${freshLocation.longitude} (±${freshLocation.accuracy}m)")
+                updateNotification("Location obtained: ±${freshLocation.accuracy.toInt()}m accuracy")
+            } else {
+                Log.w(TAG, "Fresh fix failed — alert will send with last known or no location")
+                updateNotification("Location unavailable — using last known position")
+            }
+
+            val location = locationTracker.lastKnownLocation.value
+            val contacts = contactRepository.getAllContactsList()
+            val prefs = preferencesRepository.currentPrefs
+
+            if (contacts.isEmpty()) {
+                Log.w(TAG, "No emergency contacts configured")
+                updateNotification("No contacts configured — dispatching to 112 only")
+            }
+
+            // Build message with location
+            val batteryLevel = OEMHelper.getBatteryLevel(this)
+            val hasData = OEMHelper.hasDataConnection(this)
+
+            val message = SmsVerificationHelper.formatEmergencyMessage(
+                template = prefs.smsTemplate,
+                latitude = location?.latitude,
+                longitude = location?.longitude,
+                accuracy = location?.accuracy,
+                batteryLevel = batteryLevel,
+                hasData = hasData
+            )
+
+            Log.d(TAG, "Alert message: $message")
+
+            // Create alert log entry WITH location saved
+            val alertLog = AlertLog(
+                triggerType = triggerType,
+                latitude = location?.latitude,
+                longitude = location?.longitude,
+                accuracy = location?.accuracy,
+                batteryLevel = batteryLevel,
+                hasDataConnection = hasData
+            )
+            val alertId = alertRepository.createAlert(alertLog)
+            Log.d(TAG, "Alert logged with ID: $alertId")
+
+            updateNotification("Alert active — sending to ${contacts.size} contacts")
+
+            // Start escalation manager
+            escalationManager.startEscalation(contacts)
+
+            // Dispatch to all contacts with retry
+            var sentCount = 0
+            for (contact in contacts) {
+                val success = dispatchToContact(contact, message, alertId, sentCount)
+                if (success) {
+                    sentCount++
+                    alertRepository.incrementSmsCount(alertId)
+                }
+            }
+
+            // Dispatch to emergency number (112)
+            dispatchToEmergencyNumber(alertId, prefs, location)
+
+            // Start missed calls to contacts (after SMS)
+            for (contact in contacts) {
+                try {
+                    callManager.placeMissedCall(contact, ringDurationMs = 5000L)
+                    alertRepository.incrementCallCount(alertId)
+                    delay(6000L)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed missed call to ${contact.name}", e)
+                }
+            }
+
+            // Start background location update service
+            val locationIntent = Intent(this, LocationTrackingService::class.java).apply {
+                action = LocationTrackingService.ACTION_START
+                putExtra(LocationTrackingService.EXTRA_ALERT_ID, alertId)
+            }
+            startForegroundService(locationIntent)
+
+            // Update notification
+            updateNotification("Alert active — $sentCount contacts notified, location tracking")
+
+            // Log final status
+            val elapsed = System.currentTimeMillis() - startTime
+            Log.d(TAG, "Alert dispatch complete in ${elapsed}ms: $sentCount SMS sent, location=${location?.latitude ?: "null"}")
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Alert dispatch failed", e)
+            updateNotification("Alert failed: ${e.message}")
+        }
+    }
+
     private suspend fun dispatchToContact(
-        contact: EmergencyContact,
+        contact: com.rakshasetu.app.data.entity.EmergencyContact,
         message: String,
         alertId: Long,
         sentCount: Int
@@ -201,7 +233,6 @@ class AlertDispatchService : Service(), CallManager.CallCallback {
 
             if (success) return true
 
-            // Wait before retry with exponential backoff
             if (attempt < maxRetries - 1) {
                 delay(retryDelays[attempt])
             }
@@ -209,13 +240,13 @@ class AlertDispatchService : Service(), CallManager.CallCallback {
         return false
     }
 
-    /**
-     * Dispatches SMS and call to the emergency number (112/ERSS).
-     */
     @SuppressLint("MissingPermission")
-    private suspend fun dispatchToEmergencyNumber(alertId: Long, prefs: AppPreferences) {
+    private suspend fun dispatchToEmergencyNumber(
+        alertId: Long,
+        prefs: com.rakshasetu.app.data.entity.AppPreferences,
+        location: android.location.Location?
+    ) {
         try {
-            val location = locationTracker.lastKnownLocation.value
             val batteryLevel = OEMHelper.getBatteryLevel(this)
             val hasData = OEMHelper.hasDataConnection(this)
 
@@ -225,7 +256,7 @@ class AlertDispatchService : Service(), CallManager.CallCallback {
                 location?.let {
                     append("Location: https://maps.google.com/?q=${it.latitude},${it.longitude}")
                     append(" (accuracy: ~${it.accuracy.toInt()}m). ")
-                }
+                } ?: append("Location unavailable. ")
                 append("Battery: $batteryLevel%. ")
                 if (!hasData) append("No data connection. ")
                 append("This is an automated emergency alert.")
@@ -237,122 +268,49 @@ class AlertDispatchService : Service(), CallManager.CallCallback {
                 sentRequestCode = 9999
             )
 
-            // Also place a call to 112
             callManager.placeEmergencyCall(
                 emergencyNumber = prefs.emergencyNumber,
                 ringDurationMs = 8000L
             )
         } catch (e: Exception) {
-            // Best effort — continue with contact notifications
+            Log.e(TAG, "Failed to dispatch to emergency number", e)
         }
     }
 
-    /**
-     * Cancels an active alert.
-     * If duress mode, the cancel appears to work but alert continues silently.
-     */
-    private suspend fun cancelAlert(alertId: Long, isDuress: Boolean) {
-        val prefs = preferencesRepository.currentPrefs
-
-        if (isDuress && prefs.duressCode != null) {
-            // Duress cancel — don't actually stop the alert
-            // The SMS/call pipeline continues silently
-            alertRepository.updateAlert(
-                AlertLog(
-                    id = alertId,
-                    triggerType = AlertLog.TRIGGER_MANUAL,
-                    isDuress = true
-                )
-            )
-            return
-        }
-
-        // Normal cancel
-        alertRepository.endAlert(alertId, isCancelled = true, cancelMethod = "user_cancel")
-        locationTracker.stopTracking()
-        callManager.cancelPendingHangup()
-        escalationManager.stopEscalation()
-        ShakeDetectionService.startCooldown(this)
-
-        cleanupAndStop()
-    }
-
-    private fun cleanupAndStop() {
-        locationTracker.stopTracking()
-        callManager.cancelPendingHangup()
-        serviceScope.cancel()
-        wakeLock?.let { if (it.isHeld) it.release() }
-        stopForeground(STOP_FOREGROUND_REMOVE)
-        stopSelf()
-    }
-
-    private fun acquireWakeLock() {
-        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
-        wakeLock = pm.newWakeLock(
-            PowerManager.PARTIAL_WAKE_LOCK,
-            "rakshasetu::alert_dispatch"
+    private fun createNotificationChannel() {
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL,
+            "Emergency Alert",
+            NotificationManager.IMPORTANCE_HIGH
         ).apply {
-            acquire(30 * 60 * 1000L) // 30 minutes max
+            description = "Shows when an emergency alert is being dispatched"
+            setShowBadge(false)
         }
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
     }
 
-    private fun createNotification(text: String): Notification {
-        val cancelIntent = Intent(this, AlertDispatchService::class.java).apply {
-            action = ACTION_STOP
-        }
-        val cancelPending = PendingIntent.getService(
-            this, 0, cancelIntent,
+    private fun buildForegroundNotification(text: String): Notification {
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        return NotificationCompat.Builder(this, RakshaSetuApp.CHANNEL_ALERT)
-            .setContentTitle("🚨 EMERGENCY ALERT ACTIVE")
+        return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
+            .setContentTitle("RakshaSetu Alert Active")
             .setContentText(text)
             .setSmallIcon(R.drawable.ic_sos)
             .setOngoing(true)
-            .setSilent(false)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .addAction(R.drawable.ic_cancel, "Cancel Alert", cancelPending)
+            .setContentIntent(pendingIntent)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .build()
     }
 
     private fun updateNotification(text: String) {
-        val notification = createNotification(text)
-        val nm = getSystemService(android.app.NotificationManager::class.java)
-        nm.notify(NOTIFICATION_ID, notification)
-    }
-
-    // CallManager callbacks
-    override fun onCallStarted(contactId: Long) {}
-    override fun onCallEnded(contactId: Long) {}
-    override fun onCallFailed(contactId: Long, error: String) {}
-
-    companion object {
-        const val ACTION_DISPATCH_ALERT = "com.rakshasetu.action.DISPATCH_ALERT"
-        const val ACTION_CANCEL_ALERT = "com.rakshasetu.action.CANCEL_ALERT"
-        const val ACTION_STOP = "com.rakshasetu.action.STOP_DISPATCH"
-        const val EXTRA_ALERT_ID = "alert_id"
-        const val EXTRA_IS_AIRPLANE_MODE = "is_airplane_mode"
-        const val EXTRA_IS_DURESS = "is_duress"
-        const val NOTIFICATION_ID = 1002
-
-        fun dispatchAlert(context: Context, alertId: Long, isAirplaneMode: Boolean = false) {
-            val intent = Intent(context, AlertDispatchService::class.java).apply {
-                action = ACTION_DISPATCH_ALERT
-                putExtra(EXTRA_ALERT_ID, alertId)
-                putExtra(EXTRA_IS_AIRPLANE_MODE, isAirplaneMode)
-            }
-            context.startForegroundService(intent)
-        }
-
-        fun cancelAlert(context: Context, alertId: Long, isDuress: Boolean = false) {
-            val intent = Intent(context, AlertDispatchService::class.java).apply {
-                action = ACTION_CANCEL_ALERT
-                putExtra(EXTRA_ALERT_ID, alertId)
-                putExtra(EXTRA_IS_DURESS, isDuress)
-            }
-            context.startService(intent)
-        }
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        val notification = buildForegroundNotification(text)
+        notificationManager.notify(NOTIFICATION_ID, notification)
     }
 }

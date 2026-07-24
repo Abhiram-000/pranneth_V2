@@ -13,40 +13,71 @@
     <!-- Safe Button -->
     <color name="safe_button">#2E7D32</color>
 
-    <!-- Background -->
-    <color name="background">#FAFAFA</color>
-    <color name="card_background">#FFFFFF</color>
+    <!-- Background - Dark gradient base for glassmorphism -->
+    <color name="background">#0F1923</color>
+    <color name="background_gradient_start">#0F1923</color>
+    <color name="background_gradient_mid">#1A2940</color>
+    <color name="background_gradient_end">#0D1B2A</color>
 
-    <!-- Text -->
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
+    <!-- Legacy alias -->
+    <color name="card_background">#1E293B</color>
+
+    <!-- Glass surfaces -->
+    <color name="glass_card">#1AFFFFFF</color>
+    <color name="glass_card_solid">#1E293B</color>
+    <color name="glass_border">#33FFFFFF</color>
+    <color name="glass_border_accent">#4DFF6B35</color>
+
+    <!-- Text on dark glass -->
+    <color name="text_primary">#F0F4F8</color>
+    <color name="text_secondary">#94A3B8</color>
+    <color name="text_accent">#FF8A5C</color>
+    <color name="text_glass">#CBD5E1</color>
 
     <!-- Status -->
-    <color name="status_active">#2E7D32</color>
-    <color name="status_inactive">#D32F2F</color>
-    <color name="warning">#F57C00</color>
+    <color name="status_active">#34D399</color>
+    <color name="status_inactive">#F87171</color>
+    <color name="warning">#FBBF24</color>
+    <color name="success_green">#34D399</color>
+    <color name="warning_orange">#FBBF24</color>
 
     <!-- Countdown -->
-    <color name="countdown_background">#1A1A2E</color>
+    <color name="countdown_background">#0F1923</color>
     <color name="countdown_text">#FFFFFF</color>
-    <color name="countdown_text_secondary">#B0B0B0</color>
+    <color name="countdown_text_secondary">#94A3B8</color>
+    <color name="countdown_pulse">#D32F2F</color>
+
+    <!-- Glass card variants -->
+    <color name="glass_status">#1A34D399</color>
+    <color name="glass_warning">#1AFBBF24</color>
+    <color name="glass_sos">#1AF87171</color>
+    <color name="glass_primary">#1AFF6B35</color>
 
     <!-- Divider -->
-    <color name="divider">#E0E0E0</color>
+    <color name="divider">#33FFFFFF</color>
 
     <!-- Chip background -->
-    <color name="chip_background">#E3F2FD</color>
-    <color name="chip_text">#1565C0</color>
+    <color name="chip_background">#1A3B82F6</color>
+    <color name="chip_text">#93C5FD</color>
 
-    <!-- Material You compatible colors -->
-    <color name="md_theme_primary">#FF6B35</color>
+    <!-- Gradient overlay for glass effect -->
+    <color name="glass_gradient_top">#00FFFFFF</color>
+    <color name="glass_gradient_bottom">#0DFFFFFF</color>
+
+    <!-- Material You compatible colors (dark theme) -->
+    <color name="md_theme_primary">#FF8A5C</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_primaryContainer">#FFE0D0</color>
-    <color name="md_theme_onPrimaryContainer">#2B0A00</color>
-    <color name="md_theme_secondary">#755846</color>
-    <color name="md_theme_onSecondary">#FFFFFF</color>
-    <color name="md_theme_background">#FFFBFF</color>
-    <color name="md_theme_onBackground">#201A18</color>
-    <color name="md_theme_surface">#FFFBFF</color>
-    <color name="md_theme_onSurface">#201A18</color>
+    <color name="md_theme_primaryContainer">#4A2000</color>
+    <color name="md_theme_onPrimaryContainer">#FFDCC8</color>
+    <color name="md_theme_secondary">#C4A882</color>
+    <color name="md_theme_onSecondary">#2B1A00</color>
+    <color name="md_theme_background">#0F1923</color>
+    <color name="md_theme_onBackground">#E2E8F0</color>
+    <color name="md_theme_surface">#1E293B</color>
+    <color name="md_theme_onSurface">#E2E8F0</color>
+
+    <!-- SOS button glass effect -->
+    <color name="sos_glass">#33F87171</color>
+    <color name="sos_glass_border">#66F87171</color>
+    <color name="sos_glow">#40F87171</color>
 </resources>

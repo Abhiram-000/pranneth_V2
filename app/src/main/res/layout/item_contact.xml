@@ -4,9 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/card_background">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/glass_card_solid"
+    app:strokeColor="@color/glass_border"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,15 +27,16 @@
                 android:id="@+id/tvContactName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:textColor="@color/text_primary"
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/tvContactPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:textColor="@color/text_secondary"
                 android:layout_marginTop="2dp" />
 
@@ -41,15 +44,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="6dp">
 
                 <TextView
                     android:id="@+id/tvContactRelation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/primary"
-                    android:background="@drawable/bg_chip"
+                    android:textSize="11sp"
+                    android:textColor="@color/md_theme_primary"
+                    android:background="@drawable/bg_glass_primary"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="2dp" />
 
@@ -57,7 +60,7 @@
                     android:id="@+id/tvPriority"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:textColor="@color/text_secondary"
                     android:layout_marginStart="8dp" />
 
@@ -65,15 +68,15 @@
                     android:id="@+id/tvVerified"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="✓ Verified"
-                    android:textSize="12sp"
+                    android:text="Verified"
+                    android:textSize="11sp"
                     android:textColor="@color/status_active"
                     android:layout_marginStart="8dp"
                     android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Action Buttons -->
+        <!-- Action Buttons - Glass -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -82,29 +85,32 @@
 
             <ImageButton
                 android:id="@+id/btnTest"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:src="@drawable/ic_test"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/bg_glass_card"
+                android:padding="6dp"
                 android:contentDescription="Send test alert"
                 android:scaleType="centerInside" />
 
             <ImageButton
                 android:id="@+id/btnEdit"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:src="@drawable/ic_edit"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/bg_glass_card"
+                android:padding="6dp"
                 android:contentDescription="Edit contact"
                 android:scaleType="centerInside"
                 android:layout_marginTop="4dp" />
 
             <ImageButton
                 android:id="@+id/btnDelete"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:src="@drawable/ic_delete"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/bg_glass_card"
+                android:padding="6dp"
                 android:contentDescription="Delete contact"
                 android:scaleType="centerInside"
                 android:layout_marginTop="4dp" />
