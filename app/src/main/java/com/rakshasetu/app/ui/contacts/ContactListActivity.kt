@@ -14,6 +14,7 @@ import com.rakshasetu.app.data.entity.EmergencyContact
 import com.rakshasetu.app.data.repository.ContactRepository
 import com.rakshasetu.app.databinding.ActivityContactListBinding
 import com.rakshasetu.app.ui.adapter.ContactAdapter
+import com.rakshasetu.app.util.SmsVerificationHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,9 +40,6 @@ class ContactListActivity : AppCompatActivity(), ContactAdapter.OnContactActionL
     }
 
     private fun setupToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Emergency Contacts"
         binding.toolbar.setNavigationOnClickListener { finish() }
     }
 
@@ -69,7 +67,6 @@ class ContactListActivity : AppCompatActivity(), ContactAdapter.OnContactActionL
 
             override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
                 super.clearView(recyclerView, viewHolder)
-                // Save new order
                 lifecycleScope.launch {
                     contactRepository.reorderContacts(adapter.currentList)
                 }
@@ -111,7 +108,7 @@ class ContactListActivity : AppCompatActivity(), ContactAdapter.OnContactActionL
     override fun onDeleteClick(contact: EmergencyContact) {
         AlertDialog.Builder(this)
             .setTitle("Delete Contact")
-            .setMessage("Remove ${contact.name} from emergency contacts?")
+            .setMessage("Remove ${contact.name} from emergency contacts?\n\nThey will no longer receive alerts.")
             .setPositiveButton("Delete") { _, _ ->
                 lifecycleScope.launch {
                     contactRepository.deleteContact(contact)
@@ -124,14 +121,20 @@ class ContactListActivity : AppCompatActivity(), ContactAdapter.OnContactActionL
 
     override fun onTestAlertClick(contact: EmergencyContact) {
         AlertDialog.Builder(this)
-            .setTitle("Send Test Alert")
+            .setTitle("Send Test Alert to ${contact.name}?")
             .setMessage(
-                "This will send a TEST SMS to ${contact.name} (${contact.fullPhoneNumber}).\n\n" +
-                "The message will be clearly marked as a TEST so they know it's not a real emergency."
+                "This will send a TEST SMS to ${contact.fullPhoneNumber}.\n\n" +
+                "The message will be clearly marked as a TEST so they know it's not a real emergency.\n\n" +
+                "They'll receive a message like:\n\n" +
+                "\"🧪 TEST ALERT from RakshaSetu — This is a test message...\""
             )
-            .setPositiveButton("Send Test") { _, _ ->
-                // TODO: Implement test SMS sending
-                Toast.makeText(this, "Test SMS sent to ${contact.name}", Toast.LENGTH_SHORT).show()
+            .setPositiveButton("Send Test SMS") { _, _ ->
+                val success = SmsVerificationHelper.sendTestSms(this, contact, contact.id.toInt())
+                if (success) {
+                    Toast.makeText(this, "Test SMS sent to ${contact.name}", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Failed to send test SMS", Toast.LENGTH_SHORT).show()
+                }
             }
             .setNegativeButton("Cancel", null)
             .show()

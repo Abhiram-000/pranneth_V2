@@ -1,5 +1,6 @@
 package com.rakshasetu.app.domain.sms
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -19,46 +20,19 @@ import javax.inject.Singleton
 class SMSDispatcher @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    interface SmsCallback {
-        fun onSmsSent(contactId: Long, success: Boolean)
-        fun onSmsDelivered(contactId: Long, success: Boolean)
-    }
-
-    /**
-     * Formats the SMS template with actual location and context data.
-     */
-    fun formatSmsMessage(
-        template: String,
-        latitude: Double?,
-        longitude: Double?,
-        accuracy: Float?,
-        batteryLevel: Int?,
-        hasData: Boolean
-    ): String {
-        val locationText = if (latitude != null && longitude != null) {
-            val accuracyText = if (accuracy != null) " (~${accuracy.toInt()}m accuracy)" else ""
-            "https://maps.google.com/?q=$latitude,$longitude$accuracyText"
+    private fun getSmsManager(): SmsManager {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            context.getSystemService(SmsManager::class.java)
         } else {
-            "Location unavailable"
+            @Suppress("DEPRECATION")
+            SmsManager.getDefault()
         }
-
-        val batteryText = if (batteryLevel != null) "Battery: $batteryLevel%" else ""
-        val dataText = if (!hasData) "No data connection" else ""
-
-        return template
-            .replace("{location}", locationText)
-            .replace("{battery}", batteryText)
-            .replace("{data_status}", dataText)
-            .replace("{timestamp}", java.text.SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss",
-                java.util.Locale.getDefault()
-            ).format(java.util.Date()))
     }
 
     /**
      * Sends SMS to a contact. Returns true if the send was initiated successfully.
-     * Note: actual delivery is async via the sent/delivery intents.
      */
+    @SuppressLint("MissingPermission")
     fun sendSms(
         contact: EmergencyContact,
         message: String,
@@ -66,32 +40,17 @@ class SMSDispatcher @Inject constructor(
         deliveredRequestCode: Int
     ): Boolean {
         return try {
-            val smsManager = SmsManager.getDefault()
-
-            // Check if message needs to be split (multi-part)
+            val smsManager = getSmsManager()
             val parts = smsManager.divideMessage(message)
 
             if (parts != null && parts.size > 1) {
-                // Multi-part SMS
                 val sentIntents = parts.mapIndexed { index, _ ->
                     val sentIntent = Intent("com.rakshasetu.app.SMS_SENT")
                     sentIntent.putExtra("contact_id", contact.id)
-                    sentIntent.putExtra("part_index", index)
                     PendingIntent.getBroadcast(
                         context,
                         sentRequestCode + index,
                         sentIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                    )
-                }
-                val deliveredIntents = parts.mapIndexed { index, _ ->
-                    val deliveredIntent = Intent("com.rakshasetu.app.SMS_DELIVERED")
-                    deliveredIntent.putExtra("contact_id", contact.id)
-                    deliveredIntent.putExtra("part_index", index)
-                    PendingIntent.getBroadcast(
-                        context,
-                        deliveredRequestCode + index,
-                        deliveredIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                     )
                 }
@@ -100,11 +59,10 @@ class SMSDispatcher @Inject constructor(
                     contact.fullPhoneNumber,
                     null,
                     parts,
-                    sentIntents.toArrayList(),
-                    deliveredIntents.toArrayList()
+                    ArrayList(sentIntents),
+                    null
                 )
             } else {
-                // Single-part SMS
                 val sentIntent = Intent("com.rakshasetu.app.SMS_SENT")
                 sentIntent.putExtra("contact_id", contact.id)
                 val sentPendingIntent = PendingIntent.getBroadcast(
@@ -141,15 +99,16 @@ class SMSDispatcher @Inject constructor(
     /**
      * Sends SMS to the emergency number (112/ERSS).
      */
+    @SuppressLint("MissingPermission")
     fun sendEmergencySms(
         emergencyNumber: String,
         message: String,
         sentRequestCode: Int
     ): Boolean {
         return try {
-            val smsManager = SmsManager.getDefault()
+            val smsManager = getSmsManager()
             val sentIntent = Intent("com.rakshasetu.app.SMS_SENT")
-            sentIntent.putExtra("contact_id", -1L) // -1 for emergency number
+            sentIntent.putExtra("contact_id", -1L)
             val sentPendingIntent = PendingIntent.getBroadcast(
                 context,
                 sentRequestCode,
@@ -157,19 +116,38 @@ class SMSDispatcher @Inject constructor(
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-            smsManager.sendTextMessage(
-                emergencyNumber,
-                null,
-                message,
-                sentPendingIntent,
-                null
-            )
+            val parts = smsManager.divideMessage(message)
+            if (parts != null && parts.size > 1) {
+                val sentIntents = parts.mapIndexed { index, _ ->
+                    PendingIntent.getBroadcast(
+                        context,
+                        sentRequestCode + index,
+                        Intent("com.rakshasetu.app.SMS_SENT").apply {
+                            putExtra("contact_id", -1L)
+                        },
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    )
+                }
+                smsManager.sendMultipartTextMessage(
+                    emergencyNumber,
+                    null,
+                    parts,
+                    ArrayList(sentIntents),
+                    null
+                )
+            } else {
+                smsManager.sendTextMessage(
+                    emergencyNumber,
+                    null,
+                    message,
+                    sentPendingIntent,
+                    null
+                )
+            }
             true
         } catch (e: Exception) {
             e.printStackTrace()
             false
         }
     }
-
-    private fun <T> List<T>.toArrayList(): ArrayList<T> = ArrayList(this)
 }

@@ -6,6 +6,26 @@
     android:orientation="vertical"
     android:background="@color/background">
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0"
+        app:indicatorColor="@color/primary"
+        app:trackColor="@color/divider"
+        app:trackThickness="4dp" />
+
+    <TextView
+        android:id="@+id/tvProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Step 1 of 6"
+        android:textSize="12sp"
+        android:textColor="@color/primary"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp" />
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"

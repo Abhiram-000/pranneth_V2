@@ -1,5 +1,7 @@
 package com.rakshasetu.app.domain.call
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -7,6 +9,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.telecom.TelecomManager
+import android.util.Log
 import com.rakshasetu.app.data.entity.EmergencyContact
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -14,8 +17,7 @@ import javax.inject.Singleton
 
 /**
  * Handles placing calls to emergency contacts and 112.
- * Implements the "missed call" pattern — ring for a few seconds then hang up
- * so the contact gets a notification to check their SMS.
+ * Implements the "missed call" pattern — ring for a few seconds then hang up.
  */
 @Singleton
 class CallManager @Inject constructor(
@@ -36,9 +38,9 @@ class CallManager @Inject constructor(
     }
 
     /**
-     * Places a call to a contact. Rings for [ringDurationMs] then hangs up
-     * to create a missed-call notification.
+     * Places a call to a contact. Rings for [ringDurationMs] then hangs up.
      */
+    @SuppressLint("MissingPermission")
     fun placeMissedCall(
         contact: EmergencyContact,
         ringDurationMs: Long = 5000L
@@ -53,11 +55,9 @@ class CallManager @Inject constructor(
             }
             context.startActivity(callIntent)
 
-            // Hang up after ring duration
-            handler.postDelayed({
-                endCall()
-            }, ringDurationMs)
+            handler.postDelayed({ endCall() }, ringDurationMs)
         } catch (e: Exception) {
+            Log.e("CallManager", "Failed to place call", e)
             callback?.onCallFailed(contact.id, e.message ?: "Unknown error")
         }
     }
@@ -65,6 +65,7 @@ class CallManager @Inject constructor(
     /**
      * Places a call to the emergency number (112).
      */
+    @SuppressLint("MissingPermission")
     fun placeEmergencyCall(
         emergencyNumber: String,
         ringDurationMs: Long = 8000L
@@ -79,17 +80,17 @@ class CallManager @Inject constructor(
             }
             context.startActivity(callIntent)
 
-            handler.postDelayed({
-                endCall()
-            }, ringDurationMs)
+            handler.postDelayed({ endCall() }, ringDurationMs)
         } catch (e: Exception) {
+            Log.e("CallManager", "Failed to place emergency call", e)
             callback?.onCallFailed(-1L, e.message ?: "Unknown error")
         }
     }
 
     /**
-     * Ends the current call using TelecomManager where available.
+     * Ends the current call.
      */
+    @SuppressLint("MissingPermission")
     fun endCall() {
         val contactId = currentCallContactId ?: return
         try {
@@ -97,17 +98,13 @@ class CallManager @Inject constructor(
                 val telecomManager = context.getSystemService(Context.TELECOM_SERVICE) as? TelecomManager
                 telecomManager?.endCall()
             } else {
-                // Fallback: try to end via reflection (not guaranteed on all devices)
-                try {
-                    val telecomManager = context.getSystemService(Context.TELECOM_SERVICE)
-                    val endCallMethod = telecomManager?.javaClass?.getMethod("endCall")
-                    endCallMethod?.invoke(telecomManager)
-                } catch (_: Exception) {
-                    // Best effort — call may continue ringing on some devices
-                }
+                @Suppress("DEPRECATION")
+                val telecomManager = context.getSystemService(Context.TELECOM_SERVICE)
+                val endCallMethod = telecomManager?.javaClass?.getMethod("endCall")
+                endCallMethod?.invoke(telecomManager)
             }
         } catch (e: Exception) {
-            // Best effort
+            Log.w("CallManager", "Could not end call programmatically: ${e.message}")
         }
         callback?.onCallEnded(contactId)
         currentCallContactId = null

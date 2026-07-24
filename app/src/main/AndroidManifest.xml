@@ -4,6 +4,8 @@
 
     <!-- SMS & Call Permissions -->
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
@@ -91,6 +93,16 @@
 
         <activity
             android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.RakshaSetu" />
+
+        <activity
+            android:name=".ui.calibration.CalibrationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.RakshaSetu" />
+
+        <activity
+            android:name=".ui.alertlog.AlertLogActivity"
             android:exported="false"
             android:theme="@style/Theme.RakshaSetu" />
 

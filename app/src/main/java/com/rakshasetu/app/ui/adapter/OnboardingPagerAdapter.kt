@@ -3,7 +3,6 @@ package com.rakshasetu.app.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.rakshasetu.app.R
 
@@ -12,8 +11,10 @@ class OnboardingPagerAdapter : RecyclerView.Adapter<OnboardingPagerAdapter.Onboa
     private val pages = listOf(
         R.layout.page_onboarding_welcome,
         R.layout.page_onboarding_permissions,
+        R.layout.page_onboarding_location,
         R.layout.page_onboarding_battery,
-        R.layout.page_onboarding_contacts
+        R.layout.page_onboarding_contacts,
+        R.layout.page_onboarding_calibration
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnboardingViewHolder {

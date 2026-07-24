@@ -17,8 +17,11 @@ import com.rakshasetu.app.R
 import com.rakshasetu.app.data.repository.PreferencesRepository
 import com.rakshasetu.app.databinding.ActivityOnboardingBinding
 import com.rakshasetu.app.ui.adapter.OnboardingPagerAdapter
+import com.rakshasetu.app.ui.calibration.CalibrationActivity
 import com.rakshasetu.app.ui.main.MainActivity
+import com.rakshasetu.app.util.LocationEnableHelper
 import com.rakshasetu.app.util.OEMHelper
+import com.rakshasetu.app.util.PermissionHelper
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -29,6 +32,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOnboardingBinding
     private lateinit var pagerAdapter: OnboardingPagerAdapter
+    private var currentPage = 0
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -36,13 +40,22 @@ class OnboardingActivity : AppCompatActivity() {
         val allGranted = permissions.values.all { it }
         if (allGranted) {
             nextStep()
+        } else {
+            val denied = permissions.filter { !it.value }.keys
+            val explanations = denied.map { PermissionHelper.getPermissionDisplayName(it) }
+            Toast.makeText(this, "Required: ${explanations.joinToString(", ")}", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private val backgroundLocationLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        nextStep() // Continue regardless
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Skip onboarding if already complete
         if (preferencesRepository.currentPrefs.isOnboardingComplete) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
@@ -54,38 +67,43 @@ class OnboardingActivity : AppCompatActivity() {
 
         setupPager()
         setupButtons()
+        updatePage(0)
     }
 
     private fun setupPager() {
         pagerAdapter = OnboardingPagerAdapter()
         binding.viewPager.adapter = pagerAdapter
-        binding.viewPager.isUserInputEnabled = false // Disable swipe — use buttons only
+        binding.viewPager.isUserInputEnabled = false
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                updateButtons(position)
+                currentPage = position
+                updatePage(position)
             }
         })
     }
 
     private fun setupButtons() {
         binding.btnNext.setOnClickListener {
-            val currentPos = binding.viewPager.currentItem
-            when (currentPos) {
-                0 -> requestPermissions()
-                1 -> showBatteryOptimization()
-                2 -> nextStep() // Skip to main — contacts will be added from there
-                3 -> completeOnboarding()
+            when (currentPage) {
+                0 -> requestMainPermissions()
+                1 -> {
+                    if (!LocationEnableHelper.isLocationEnabled(this)) {
+                        LocationEnableHelper.promptEnableLocation(this)
+                    }
+                    requestBackgroundLocation()
+                }
+                2 -> showBatteryOptimization()
+                3 -> nextStep() // Contacts
+                4 -> startActivity(Intent(this, CalibrationActivity::class.java))
+                5 -> completeOnboarding()
             }
         }
 
         binding.btnSkip.setOnClickListener {
             AlertDialog.Builder(this)
-                .setTitle("Skip Onboarding?")
-                .setMessage(
-                    "Some features may not work properly without completing setup. " +
-                    "You can configure these later in Settings."
-                )
+                .setTitle("Skip Setup?")
+                .setMessage("Some features may not work properly without completing setup. You can configure these later in Settings.")
                 .setPositiveButton("Skip Anyway") { _, _ ->
                     completeOnboarding()
                 }
@@ -94,23 +112,24 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateButtons(position: Int) {
+    private fun updatePage(position: Int) {
         binding.btnNext.text = when (position) {
             0 -> "Grant Permissions"
-            1 -> "Configure Battery"
-            2 -> "Add Contacts"
-            3 -> "Start Using App"
+            1 -> "Enable Location"
+            2 -> "Configure Battery"
+            3 -> "Add Contacts"
+            4 -> "Calibrate Gestures"
+            5 -> "Start Using App"
             else -> "Next"
         }
-        binding.btnSkip.visibility = if (position < 3) {
-            android.view.View.VISIBLE
-        } else {
-            android.view.View.GONE
-        }
-        binding.viewPager.setCurrentItem(position, true)
+        binding.btnSkip.visibility = if (position < 5) android.view.View.VISIBLE else android.view.View.GONE
+
+        val progress = ((position + 1).toFloat() / 6 * 100).toInt()
+        binding.progressIndicator.progress = progress
+        binding.tvProgress.text = "Step ${position + 1} of 6"
     }
 
-    private fun requestPermissions() {
+    private fun requestMainPermissions() {
         val permissions = mutableListOf(
             Manifest.permission.SEND_SMS,
             Manifest.permission.CALL_PHONE,
@@ -130,6 +149,24 @@ class OnboardingActivity : AppCompatActivity() {
 
         if (missing.isNotEmpty()) {
             permissionLauncher.launch(missing.toTypedArray())
+        } else {
+            nextStep()
+        }
+    }
+
+    private fun requestBackgroundLocation() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            AlertDialog.Builder(this)
+                .setTitle("Background Location")
+                .setMessage("Allow RakshaSetu to access your location even when the app is closed? This is needed to share your live location during an active emergency alert.")
+                .setPositiveButton("Allow") { _, _ ->
+                    backgroundLocationLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                }
+                .setNegativeButton("Skip") { _, _ ->
+                    nextStep()
+                }
+                .show()
         } else {
             nextStep()
         }
@@ -155,9 +192,8 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun nextStep() {
-        val currentPos = binding.viewPager.currentItem
-        if (currentPos < 3) {
-            binding.viewPager.setCurrentItem(currentPos + 1, true)
+        if (currentPage < 5) {
+            binding.viewPager.setCurrentItem(currentPage + 1, true)
         }
     }
 

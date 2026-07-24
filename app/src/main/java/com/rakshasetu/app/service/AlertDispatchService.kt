@@ -25,6 +25,7 @@ import com.rakshasetu.app.domain.sms.SMSDispatcher
 import com.rakshasetu.app.ui.countdown.CountdownActivity
 import com.rakshasetu.app.util.AlertUtils
 import com.rakshasetu.app.util.OEMHelper
+import com.rakshasetu.app.util.SmsVerificationHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -117,7 +118,7 @@ class AlertDispatchService : Service(), CallManager.CallCallback {
         // Format SMS message
         val batteryLevel = OEMHelper.getBatteryLevel(this)
         val hasData = OEMHelper.hasDataConnection(this)
-        val message = smsDispatcher.formatSmsMessage(
+        val message = SmsVerificationHelper.formatEmergencyMessage(
             template = prefs.smsTemplate,
             latitude = location?.latitude,
             longitude = location?.longitude,

@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/primary"
+        app:title="Settings"
         app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_back"
         app:navigationIconTint="@android:color/white" />
 
     <ScrollView
@@ -22,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="20dp">
 
             <!-- Trigger Sensitivity -->
             <TextView
@@ -182,7 +184,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Use {location}, {battery}, {data_status}, {timestamp} as placeholders"
+                android:text="Use {location}, {battery}, {data_status}, {timestamp}"
                 android:textSize="12sp"
                 android:textColor="@color/text_secondary"
                 android:layout_marginTop="4dp" />

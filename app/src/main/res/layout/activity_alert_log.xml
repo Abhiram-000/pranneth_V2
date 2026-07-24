@@ -11,40 +11,26 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/primary"
-        app:title="Emergency Contacts"
+        app:title="Alert History"
         app:titleTextColor="@android:color/white"
         app:navigationIcon="@drawable/ic_back"
         app:navigationIconTint="@android:color/white" />
 
     <TextView
-        android:id="@+id/tvEmptyState"
+        android:id="@+id/tvEmpty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="No emergency contacts yet.\n\nTap + to add your first contact.\n\nThese people will be notified when you trigger an SOS."
+        android:text="No alerts yet.\n\nYour emergency alert history will appear here."
         android:textSize="16sp"
         android:textAlignment="center"
         android:gravity="center"
-        android:layout_marginTop="64dp"
-        android:textColor="@color/text_secondary"
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:padding="16dp"
         android:clipToPadding="false" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_add"
-        android:contentDescription="Add contact"
-        app:tint="@android:color/white"
-        app:backgroundTint="@color/primary" />
 
 </LinearLayout>
