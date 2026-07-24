@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
-    <solid android:color="@color/sos_glow" />
+    <gradient
+        android:type="radial"
+        android:gradientRadius="150dp"
+        android:centerColor="@color/sos_glow"
+        android:startColor="@color/sos_glow"
+        android:endColor="#00F87171" />
     <size
-        android:width="200dp"
-        android:height="200dp" />
+        android:width="300dp"
+        android:height="300dp" />
 </shape>

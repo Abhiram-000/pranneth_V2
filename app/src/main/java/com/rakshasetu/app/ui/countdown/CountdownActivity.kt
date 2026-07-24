@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.view.animation.DecelerateInterpolator
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -84,6 +85,16 @@ class CountdownActivity : AppCompatActivity() {
             "airplane" -> "Triggered by: Airplane Mode Detected"
             else -> "Triggered by: Manual SOS"
         }
+
+        // Wire up I'M SAFE / Cancel buttons
+        setupCancelButton()
+
+        // Handle back press via dispatcher (onBackPressed is deprecated)
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showCancelDialog()
+            }
+        })
 
         // CRITICAL: Pre-warm GPS during countdown so location is ready
         preWarmLocation()
@@ -231,6 +242,101 @@ class CountdownActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupCancelButton() {
+        // Visible countdown: I'M SAFE button
+        binding.btnSafe.setOnClickListener {
+            showCancelDialog()
+        }
+        // Long press for duress cancel (fake cancel but alert continues silently)
+        binding.btnSafe.setOnLongClickListener {
+            showDuressCancelDialog()
+            true
+        }
+
+        // Silent countdown: CANCEL button
+        binding.btnSilentCancel.setOnClickListener {
+            showCancelDialog()
+        }
+        binding.btnSilentCancel.setOnLongClickListener {
+            showDuressCancelDialog()
+            true
+        }
+    }
+
+    private fun showCancelDialog() {
+        countdownJob?.cancel()
+        AlertDialog.Builder(this)
+            .setTitle("Cancel Alert?")
+            .setMessage("Are you sure you want to cancel this emergency alert?")
+            .setPositiveButton("Yes, Cancel") { _, _ ->
+                finish()
+            }
+            .setNegativeButton("No, Keep") { dialog, _ ->
+                // Restart countdown
+                dialog.dismiss()
+                lifecycleScope.launch {
+                    if (isSilent) {
+                        setupSilentCountdown()
+                    } else {
+                        setupVisibleCountdown()
+                    }
+                }
+            }
+            .setOnCancelListener {
+                // If dialog dismissed by touching outside, also restart
+                lifecycleScope.launch {
+                    if (isSilent) {
+                        setupSilentCountdown()
+                    } else {
+                        setupVisibleCountdown()
+                    }
+                }
+            }
+            .show()
+    }
+
+    private fun showDuressCancelDialog() {
+        countdownJob?.cancel()
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        val duressCode = prefs.getString("duress_code", "") ?: ""
+
+        if (duressCode.isEmpty()) {
+            // No duress code set — just cancel normally
+            showCancelDialog()
+            return
+        }
+
+        val input = android.widget.EditText(this).apply {
+            hint = "Enter duress code to cancel"
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Duress Cancel")
+            .setMessage("Enter your duress code. Alert will appear cancelled but continues silently.")
+            .setView(input)
+            .setPositiveButton("Cancel Alert") { _, _ ->
+                if (input.text.toString() == duressCode) {
+                    // Duress cancel — alert continues silently
+                    Toast.makeText(this, "Alert cancelled (but tracking continues)", Toast.LENGTH_SHORT).show()
+                    finish()
+                } else {
+                    Toast.makeText(this, "Wrong code", Toast.LENGTH_SHORT).show()
+                    // Restart countdown
+                    lifecycleScope.launch {
+                        if (isSilent) setupSilentCountdown() else setupVisibleCountdown()
+                    }
+                }
+            }
+            .setNegativeButton("Keep Alert") { dialog, _ ->
+                dialog.dismiss()
+                lifecycleScope.launch {
+                    if (isSilent) setupSilentCountdown() else setupVisibleCountdown()
+                }
+            }
+            .show()
+    }
+
     private fun fireAlert() {
         // Final location check — get best available
         val location = locationTracker.lastKnownLocation.value
@@ -253,21 +359,6 @@ class CountdownActivity : AppCompatActivity() {
             })
             finish()
         }
-    }
-
-    override fun onBackPressed() {
-        // Allow canceling — this is a duress safety feature
-        countdownJob?.cancel()
-        AlertDialog.Builder(this)
-            .setTitle("Cancel Alert?")
-            .setMessage("Are you sure you want to cancel this emergency alert?")
-            .setPositiveButton("Yes, Cancel") { _, _ ->
-                finish()
-            }
-            .setNegativeButton("No, Keep") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
     }
 
     private fun preferences() = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).let {
