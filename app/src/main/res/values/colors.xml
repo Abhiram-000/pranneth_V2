@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Brand Colors -->
+    <color name="primary">#FF6B35</color>
+    <color name="primary_dark">#E55A25</color>
+    <color name="primary_light">#FF8A5C</color>
+    <color name="accent">#FFD166</color>
+
+    <!-- SOS Button -->
+    <color name="sos_button">#D32F2F</color>
+    <color name="sos_button_pressed">#B71C1C</color>
+
+    <!-- Safe Button -->
+    <color name="safe_button">#2E7D32</color>
+
+    <!-- Background -->
+    <color name="background">#FAFAFA</color>
+    <color name="card_background">#FFFFFF</color>
+
+    <!-- Text -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+
+    <!-- Status -->
+    <color name="status_active">#2E7D32</color>
+    <color name="status_inactive">#D32F2F</color>
+    <color name="warning">#F57C00</color>
+
+    <!-- Countdown -->
+    <color name="countdown_background">#1A1A2E</color>
+    <color name="countdown_text">#FFFFFF</color>
+    <color name="countdown_text_secondary">#B0B0B0</color>
+
+    <!-- Divider -->
+    <color name="divider">#E0E0E0</color>
+
+    <!-- Chip background -->
+    <color name="chip_background">#E3F2FD</color>
+    <color name="chip_text">#1565C0</color>
+
+    <!-- Material You compatible colors -->
+    <color name="md_theme_primary">#FF6B35</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#FFE0D0</color>
+    <color name="md_theme_onPrimaryContainer">#2B0A00</color>
+    <color name="md_theme_secondary">#755846</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_background">#FFFBFF</color>
+    <color name="md_theme_onBackground">#201A18</color>
+    <color name="md_theme_surface">#FFFBFF</color>
+    <color name="md_theme_onSurface">#201A18</color>
+</resources>
