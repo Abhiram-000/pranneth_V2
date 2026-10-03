@@ -150,8 +150,8 @@ class ShakeDetectionService : Service(), ShakeDetector.ShakeListener {
             sensorManager.registerListener(
                 shakeDetector,
                 accelerometer,
-                SensorManager.SENSOR_DELAY_UI,
-                0 // Immediate reporting
+                SensorManager.SENSOR_DELAY_GAME,
+                100_000 // 100 ms batch latency (low-power)
             )
             Log.d(TAG, "Accelerometer registered (TYPE_ACCELEROMETER)")
         } else {
