@@ -282,7 +282,7 @@ class AlertDispatchService : LifecycleService() {
                 append("I need immediate help. ")
                 location?.let {
                     append("Location: https://maps.google.com/?q=${it.latitude},${it.longitude}")
-                    append(" (accuracy: ~${it.accuracy.toInt()}m). ")
+                    append(" (accurate to ~${it.accuracy.toInt()}m). ")
                 } ?: append("Location unavailable. ")
                 append("Battery: $batteryLevel%. ")
                 if (!hasData) append("No data connection. ")
