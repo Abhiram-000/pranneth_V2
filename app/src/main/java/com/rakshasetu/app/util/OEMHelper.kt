@@ -21,7 +21,12 @@ object OEMHelper {
      * Returns OEM-specific instructions for battery optimization exemption.
      */
     fun getBatteryOptimizationInstructions(context: Context): BatteryInstructions {
-        val manufacturer = getManufacturer()
+        return instructionsFor(getManufacturer())
+    }
+
+    /** Pure OEM → instructions mapping (unit-testable without Build fields). */
+    fun instructionsFor(manufacturerInput: String): BatteryInstructions {
+        val manufacturer = manufacturerInput.lowercase()
         return when {
             manufacturer.contains("xiaomi") || manufacturer.contains("redmi") -> BatteryInstructions(
                 manufacturer = "Xiaomi/Redmi",
