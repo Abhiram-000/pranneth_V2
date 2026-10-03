@@ -21,7 +21,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
-        return context.getSharedPreferences("rakshasetu_prefs", Context.MODE_PRIVATE)
+        return com.rakshasetu.app.util.SecurePrefs.secureOf(context)
     }
 
     @Provides

@@ -87,7 +87,7 @@ class ShakeDetectionService : Service(), ShakeDetector.ShakeListener {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         val prefs = com.rakshasetu.app.data.repository.PreferencesRepository(
-            getSharedPreferences("rakshasetu_prefs", MODE_PRIVATE)
+            com.rakshasetu.app.util.SecurePrefs.secureOf(this)
         ).currentPrefs
 
         shakeDetector = ShakeDetector(
@@ -108,14 +108,14 @@ class ShakeDetectionService : Service(), ShakeDetector.ShakeListener {
 
         when (intent?.action) {
             ACTION_START -> {
-                getSharedPreferences("rakshasetu_prefs", MODE_PRIVATE)
+                com.rakshasetu.app.util.SecurePrefs.secureOf(this)
                     .edit().putBoolean("monitoring_enabled", true).apply()
                 startForeground(NOTIFICATION_ID, createNotification(),
                     android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
                 startDetection()
             }
             ACTION_STOP -> {
-                getSharedPreferences("rakshasetu_prefs", MODE_PRIVATE)
+                com.rakshasetu.app.util.SecurePrefs.secureOf(this)
                     .edit().putBoolean("monitoring_enabled", false).apply()
                 stopDetection()
                 stopForeground(STOP_FOREGROUND_REMOVE)
@@ -126,7 +126,7 @@ class ShakeDetectionService : Service(), ShakeDetector.ShakeListener {
                 lastTriggerTime = System.currentTimeMillis()
                 serviceScope.launch {
                     val prefs = com.rakshasetu.app.data.repository.PreferencesRepository(
-                        getSharedPreferences("rakshasetu_prefs", MODE_PRIVATE)
+                        com.rakshasetu.app.util.SecurePrefs.secureOf(this@ShakeDetectionService)
                     ).currentPrefs
                     delay(prefs.cooldownDurationMs)
                     isCooldownActive = false

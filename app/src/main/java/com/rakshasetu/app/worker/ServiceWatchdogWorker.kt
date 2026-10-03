@@ -29,7 +29,7 @@ class ServiceWatchdogWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         val monitoringEnabled = try {
-            applicationContext.getSharedPreferences("rakshasetu_prefs", Context.MODE_PRIVATE)
+            com.rakshasetu.app.util.SecurePrefs.secureOf(applicationContext)
                 .getBoolean("monitoring_enabled", true)
         } catch (_: Exception) { true }
 

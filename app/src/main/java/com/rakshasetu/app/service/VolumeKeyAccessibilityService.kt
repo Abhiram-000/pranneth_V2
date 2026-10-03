@@ -21,7 +21,7 @@ class VolumeKeyAccessibilityService : AccessibilityService(), VolumeButtonDetect
     override fun onServiceConnected() {
         super.onServiceConnected()
         val prefs = com.rakshasetu.app.data.repository.PreferencesRepository(
-            getSharedPreferences("rakshasetu_prefs", MODE_PRIVATE)
+            com.rakshasetu.app.util.SecurePrefs.secureOf(this)
         ).currentPrefs
         volumeDetector = VolumeButtonDetector(this, VolumeButtonDetector.VolumeConfig(
             requiredPresses = prefs.volumePressCount,

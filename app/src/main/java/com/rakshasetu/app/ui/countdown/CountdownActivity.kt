@@ -329,7 +329,7 @@ class CountdownActivity : AppCompatActivity() {
 
     private fun showDuressCancelDialog() {
         countdownJob?.cancel()
-        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        val prefs = com.rakshasetu.app.util.SecurePrefs.secureOf(this)
         val duressCode = prefs.getString("duress_code", "") ?: ""
 
         if (duressCode.isEmpty()) {
@@ -396,7 +396,7 @@ class CountdownActivity : AppCompatActivity() {
         }
     }
 
-    private fun preferences() = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).let {
+    private fun preferences() = com.rakshasetu.app.util.SecurePrefs.secureOf(this).let {
         object {
             val countdownDurationSeconds: Int get() = it.getInt("countdown_duration", 10)
             val silentCountdownDurationSeconds: Int get() = it.getInt("silent_countdown_duration", 30)

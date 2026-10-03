@@ -20,7 +20,7 @@ class BootReceiver : BroadcastReceiver() {
             action == Intent.ACTION_MY_PACKAGE_REPLACED) {
 
             // Use shared prefs directly — Hilt may not be available in boot receiver
-            val prefs = context.getSharedPreferences("rakshasetu_prefs", Context.MODE_PRIVATE)
+            val prefs = com.rakshasetu.app.util.SecurePrefs.secureOf(context)
             val onboardingComplete = prefs.getBoolean("is_onboarding_complete", false)
             val serviceEnabled = prefs.getBoolean("shake_detection_enabled", true)
 
