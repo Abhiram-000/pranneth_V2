@@ -23,6 +23,7 @@ class VolumeButtonDetector(
     private var downPressed = false
     private var lastUpTime = 0L
     private var lastDownTime = 0L
+    private var lastFiredAt = -REARM_COOLDOWN_MS
 
     @Volatile
     private var config_copy = config
@@ -58,13 +59,19 @@ class VolumeButtonDetector(
             }
         }
 
+        // Enforced cooldown: one detection suppresses all re-fires for 500 ms.
+        if (currentTime - lastFiredAt < REARM_COOLDOWN_MS) return
+
         // Check if both buttons pressed within the time window
         if (config_copy.requireBothButtons) {
             if (upPressed && downPressed) {
                 val timeDiff = kotlin.math.abs(lastUpTime - lastDownTime)
                 if (timeDiff <= config_copy.windowMs) {
                     listener.onVolumeComboDetected()
+                    lastFiredAt = currentTime
                     pressTimestamps.clear()
+                    upPressed = false
+                    downPressed = false
                     return
                 }
             }
@@ -78,6 +85,7 @@ class VolumeButtonDetector(
 
                 if (pressTimestamps.size >= config_copy.requiredPresses) {
                     listener.onVolumeComboDetected()
+                    lastFiredAt = currentTime
                     pressTimestamps.clear()
                 }
             }
@@ -90,5 +98,10 @@ class VolumeButtonDetector(
         downPressed = false
         lastUpTime = 0L
         lastDownTime = 0L
+        lastFiredAt = -REARM_COOLDOWN_MS
+    }
+
+    companion object {
+        const val REARM_COOLDOWN_MS = 500L
     }
 }
