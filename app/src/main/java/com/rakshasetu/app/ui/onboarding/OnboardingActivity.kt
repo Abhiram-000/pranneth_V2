@@ -18,6 +18,8 @@ import com.rakshasetu.app.data.repository.ContactRepository
 import com.rakshasetu.app.data.repository.PreferencesRepository
 import com.rakshasetu.app.util.SmsVerificationHelper
 import com.rakshasetu.app.databinding.ActivityOnboardingBinding
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import com.rakshasetu.app.ui.adapter.OnboardingPagerAdapter
 import com.rakshasetu.app.ui.calibration.CalibrationActivity
 import com.rakshasetu.app.ui.main.MainActivity
@@ -207,11 +209,11 @@ class OnboardingActivity : AppCompatActivity() {
         preferencesRepository.completeOnboarding()
         // Non-blocking verification: send one clearly-labeled TEST SMS to the
         // first emergency contact so they recognize what a real alert looks like.
-        kotlinx.coroutines.MainScope().launch {
+        lifecycleScope.launch {
             try {
                 val contacts = contactRepository.getAllContactsList()
                 if (contacts.isNotEmpty()) {
-                    SmsVerificationHelper().sendTestSms(this@OnboardingActivity, contacts.first(), 777)
+                    SmsVerificationHelper.sendTestSms(this@OnboardingActivity, contacts.first(), 777)
                     Toast.makeText(
                         this@OnboardingActivity,
                         "TEST SMS sent to ${contacts.first().name} — real alerts look the same",
