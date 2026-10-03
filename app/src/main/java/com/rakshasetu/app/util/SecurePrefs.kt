@@ -18,7 +18,8 @@ object SecurePrefs {
     fun shouldMigrate(plainExplainsData: Boolean, secureHasData: Boolean): Boolean =
         plainExplainsData && !secureHasData
 
-    fun secureOf(context: Context): SharedPreferences {
+    fun secureOf(context: Context): SharedPreferences = synchronized(this) {
+        cached?.let { return@synchronized it }
         val masterKey = MasterKey.Builder(context)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
@@ -30,8 +31,11 @@ object SecurePrefs {
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
         migrateIfNeeded(context, secure)
-        return secure
+        cached = secure
+        secure
     }
+
+    @Volatile private var cached: SharedPreferences? = null
 
     private fun migrateIfNeeded(context: Context, secure: SharedPreferences) {
         val legacy = context.getSharedPreferences(LEGACY_FILE, Context.MODE_PRIVATE)

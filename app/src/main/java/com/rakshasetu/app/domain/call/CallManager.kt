@@ -91,7 +91,7 @@ class CallManager @Inject constructor(
     @SuppressLint("MissingPermission")
     fun placeEmergencyCall(
         emergencyNumber: String,
-        ringDurationMs: Long = 4000L
+        ringDurationMs: Long? = null // standby at 0: don't auto-end a real 112 call
     ) {
         currentCallContactId = -1L
         callback?.onCallStarted(-1L)
@@ -105,11 +105,13 @@ class CallManager @Inject constructor(
             }
             context.startActivity(callIntent)
 
-            // Emergency calls stay connected longer — 10 seconds before auto-hangup
-            handler.postDelayed({
-                endCall()
-                Log.d("CallManager", "Emergency call ended")
-            }, ringDurationMs)
+            val hangUpAfter = ringDurationMs ?: EmergencyCallPolicy.hangUpAfterMs(peerIsEmergencyOperator = true)
+            hangUpAfter?.let {
+                handler.postDelayed({
+                    endCall()
+                    Log.d("CallManager", "Emergency call ended")
+                }, it)
+            }
         } catch (e: Exception) {
             Log.e("CallManager", "Failed to place emergency call to $emergencyNumber", e)
             callback?.onCallFailed(-1L, e.message ?: "Unknown error")

@@ -10,10 +10,14 @@ import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import com.rakshasetu.app.R
 import com.rakshasetu.app.RakshaSetuApp
+import com.rakshasetu.app.data.dao.LocationUpdateDao
 import com.rakshasetu.app.data.entity.LocationUpdate
 import com.rakshasetu.app.data.repository.AlertRepository
+import com.rakshasetu.app.data.repository.ContactRepository
 import com.rakshasetu.app.data.repository.PreferencesRepository
+import com.rakshasetu.app.domain.location.LocationSmsFormatter
 import com.rakshasetu.app.domain.location.LocationTracker
+import com.rakshasetu.app.domain.sms.SMSDispatcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -29,6 +33,9 @@ class LocationTrackingService : Service(), LocationTracker.LocationEventListener
     @Inject lateinit var alertRepository: AlertRepository
     @Inject lateinit var preferencesRepository: PreferencesRepository
     @Inject lateinit var locationTracker: LocationTracker
+    @Inject lateinit var locationUpdateDao: LocationUpdateDao
+    @Inject lateinit var contactRepository: ContactRepository
+    @Inject lateinit var smsDispatcher: SMSDispatcher
 
     private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private var wakeLock: PowerManager.WakeLock? = null
@@ -72,9 +79,29 @@ class LocationTrackingService : Service(), LocationTracker.LocationEventListener
 
     override fun onLocationUpdated(update: LocationUpdate) {
         serviceScope.launch {
-            val locationUpdate = update.copy(alertId = alertId)
-            // Store location update in database
-            // The update will be available for post-incident review
+            val row = update.copy(alertId = alertId)
+            // Persist the trail for post-incident review.
+            try { locationUpdateDao.insertLocation(row) } catch (_: Exception) {}
+
+            // Push the position to every emergency contact over SMS.
+            val body = buildString {
+                append("RakshaSetu update — location: ")
+                append(LocationSmsFormatter.format(row.latitude, row.longitude, row.accuracy, row.source))
+                append(". Stay safe. — RakshaSetu")
+            }
+            val contacts = contactRepository.getAllContactsList()
+            var code = alertId.toInt().coerceAtLeast(0) * 10 + 3
+            for (c in contacts) {
+                code++
+                try {
+                    smsDispatcher.sendSms(
+                        contact = c,
+                        message = body,
+                        sentRequestCode = code,
+                        deliveredRequestCode = code + 50
+                    )
+                } catch (_: Exception) {}
+            }
         }
     }
 

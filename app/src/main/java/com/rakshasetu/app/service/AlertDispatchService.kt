@@ -305,8 +305,7 @@ class AlertDispatchService : LifecycleService() {
             )
 
             callManager.placeEmergencyCall(
-                emergencyNumber = prefs.emergencyNumber,
-                ringDurationMs = 4000L
+                emergencyNumber = prefs.emergencyNumber
             )
         } catch (e: Exception) {
             Log.e(TAG, "Failed to dispatch to emergency number", e)

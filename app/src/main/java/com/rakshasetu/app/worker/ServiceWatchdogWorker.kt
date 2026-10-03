@@ -28,15 +28,20 @@ class ServiceWatchdogWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        val monitoringEnabled = try {
-            com.rakshasetu.app.util.SecurePrefs.secureOf(applicationContext)
-                .getBoolean("monitoring_enabled", true)
-        } catch (_: Exception) { true }
+        val (monitoringEnabled, onboardingComplete, serviceEnabled) = try {
+            val p = com.rakshasetu.app.util.SecurePrefs.secureOf(applicationContext)
+            Triple(
+                p.getBoolean("monitoring_enabled", false),
+                p.getBoolean("onboarding_complete", false) || p.getBoolean("is_onboarding_complete", false),
+                p.getBoolean("shake_detection_enabled", true)
+            )
+        } catch (_: Exception) { Triple(false, false, true) }
 
         val running = OEMHelper.isServiceRunning(applicationContext, ShakeDetectionService::class.java)
-        Log.i(TAG, "watchdog tick: running=$running monitoringEnabled=$monitoringEnabled")
+        Log.i(TAG, "watchdog tick: running=$running monitoringEnabled=$monitoringEnabled onboarding=$onboardingComplete")
 
-        if (WatchdogPolicy.shouldRestart(running, monitoringEnabled)) {
+        if (onboardingComplete && serviceEnabled &&
+            WatchdogPolicy.shouldRestart(running, monitoringEnabled)) {
             try {
                 applicationContext.startForegroundService(
                     Intent(applicationContext, ShakeDetectionService::class.java)

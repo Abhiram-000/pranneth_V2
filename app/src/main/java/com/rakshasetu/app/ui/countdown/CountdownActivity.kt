@@ -78,7 +78,9 @@ class CountdownActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         triggerType = intent.getStringExtra(EXTRA_TRIGGER_TYPE) ?: "unknown"
-        isSilent = intent.getBooleanExtra(EXTRA_IS_SILENT, false)
+        // Silent countdown comes from the intent extra OR the user's silent-countdown setting.
+        val prefsSilent = preferences().isSilentCountdown
+        isSilent = intent.getBooleanExtra(EXTRA_IS_SILENT, false) || prefsSilent
         val prefs = preferences()
 
         // Show trigger source
