@@ -157,6 +157,10 @@ class MainActivity : AppCompatActivity() {
             checkLocationAndStart()
         } else {
             permissionLauncher.launch(status.missing.toTypedArray())
+            if (com.rakshasetu.app.domain.PermissionWarningPolicy.shouldWarn(status.missing)) {
+                binding.tvLocationStatus.text = "⚠️ Missing permissions: ${status.missing.joinToString { PermissionHelper.getPermissionDisplayName(it) }} — SOS may not work"
+                binding.tvLocationStatus.setTextColor(ContextCompat.getColor(this, R.color.warning))
+            }
         }
 
         // Request background location separately (Android 10+)
