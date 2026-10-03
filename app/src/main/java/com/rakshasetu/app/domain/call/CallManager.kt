@@ -47,7 +47,7 @@ class CallManager @Inject constructor(
     @SuppressLint("MissingPermission")
     fun placeMissedCall(
         contact: EmergencyContact,
-        ringDurationMs: Long = 8000L
+        ringDurationMs: Long = 4000L
     ) {
         currentCallContactId = contact.id
         callback?.onCallStarted(contact.id)
@@ -91,7 +91,7 @@ class CallManager @Inject constructor(
     @SuppressLint("MissingPermission")
     fun placeEmergencyCall(
         emergencyNumber: String,
-        ringDurationMs: Long = 10000L
+        ringDurationMs: Long = 4000L
     ) {
         currentCallContactId = -1L
         callback?.onCallStarted(-1L)

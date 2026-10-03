@@ -193,7 +193,7 @@ class AlertDispatchService : LifecycleService() {
             // Start missed calls to contacts (after SMS)
             for (contact in contacts) {
                 try {
-                    callManager.placeMissedCall(contact, ringDurationMs = 5000L)
+                    callManager.placeMissedCall(contact, ringDurationMs = 4000L)
                     alertRepository.incrementCallCount(alertId)
                     delay(6000L)
                 } catch (e: Exception) {
@@ -297,7 +297,7 @@ class AlertDispatchService : LifecycleService() {
 
             callManager.placeEmergencyCall(
                 emergencyNumber = prefs.emergencyNumber,
-                ringDurationMs = 8000L
+                ringDurationMs = 4000L
             )
         } catch (e: Exception) {
             Log.e(TAG, "Failed to dispatch to emergency number", e)
