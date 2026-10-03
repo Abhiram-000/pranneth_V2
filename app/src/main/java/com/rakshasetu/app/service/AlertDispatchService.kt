@@ -55,14 +55,16 @@ class AlertDispatchService : LifecycleService() {
         const val ACTION_DISPATCH_ALERT = "com.rakshasetu.DISPATCH_ALERT"
         const val EXTRA_TRIGGER_TYPE = "trigger_type"
         const val EXTRA_IS_SILENT = "is_silent"
+        const val EXTRA_IS_DURESS = "is_duress"
         const val EXTRA_ALERT_ID = "alert_id"
         const val EXTRA_IS_AIRPLANE_MODE = "is_airplane_mode"
 
-        fun dispatchAlert(context: Context, triggerType: String, isSilent: Boolean = false) {
+        fun dispatchAlert(context: Context, triggerType: String, isSilent: Boolean = false, isDuress: Boolean = false) {
             val intent = Intent(context, AlertDispatchService::class.java).apply {
                 action = ACTION_DISPATCH_ALERT
                 putExtra(EXTRA_TRIGGER_TYPE, triggerType)
                 putExtra(EXTRA_IS_SILENT, isSilent)
+                putExtra(EXTRA_IS_DURESS, isDuress)
             }
             context.startForegroundService(intent)
         }
@@ -95,8 +97,9 @@ class AlertDispatchService : LifecycleService() {
             ACTION_DISPATCH_ALERT -> {
                 val triggerType = intent.getStringExtra(EXTRA_TRIGGER_TYPE) ?: "unknown"
                 val isSilent = intent.getBooleanExtra(EXTRA_IS_SILENT, false)
+                val isDuress = intent.getBooleanExtra(EXTRA_IS_DURESS, false)
                 lifecycleScope.launch {
-                    dispatchAlert(triggerType, isSilent)
+                    dispatchAlert(triggerType, isSilent, isDuress)
                 }
             }
         }
@@ -110,7 +113,7 @@ class AlertDispatchService : LifecycleService() {
     }
 
     @SuppressLint("MissingPermission")
-    private suspend fun dispatchAlert(triggerType: String, isSilent: Boolean) {
+    private suspend fun dispatchAlert(triggerType: String, isSilent: Boolean, isDuress: Boolean = false) {
         val startTime = System.currentTimeMillis()
 
         try {
@@ -160,7 +163,9 @@ class AlertDispatchService : LifecycleService() {
                 longitude = location?.longitude,
                 accuracy = location?.accuracy,
                 batteryLevel = batteryLevel,
-                hasDataConnection = hasData
+                hasDataConnection = hasData,
+                isDuress = isDuress,
+                cancelMethod = if (isDuress) "duress" else null
             )
             val alertId = alertRepository.createAlert(alertLog)
             Log.d(TAG, "Alert logged with ID: $alertId")

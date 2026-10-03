@@ -182,6 +182,8 @@ class CountdownActivity : AppCompatActivity() {
         binding.layoutCountdownVisual.visibility = android.view.View.VISIBLE
         binding.layoutSilentVisual.visibility = android.view.View.GONE
 
+        applyCountdownBehavior(CountdownPolicy.behavior(isSilent = false))
+
         val duration = preferences().countdownDurationSeconds.toLong()
 
         lifecycleScope.launch {
@@ -221,6 +223,8 @@ class CountdownActivity : AppCompatActivity() {
         binding.layoutCountdownVisual.visibility = android.view.View.GONE
         binding.layoutSilentVisual.visibility = android.view.View.VISIBLE
 
+        applyCountdownBehavior(CountdownPolicy.behavior(isSilent = true))
+
         val duration = preferences().silentCountdownDurationSeconds.toLong()
 
         lifecycleScope.launch {
@@ -243,6 +247,30 @@ class CountdownActivity : AppCompatActivity() {
             if (isActive) {
                 fireAlert()
             }
+        }
+    }
+
+    /** Distinct vibration signature for a real countdown vs. a notification,
+     *  and a dim screen for the silent path (so no glowing flash rings the
+     *  phone in a pocket / alerts an observer). */
+    @SuppressLint("MissingPermission")
+    private fun applyCountdownBehavior(behavior: CountdownPolicy.Behavior) {
+        if (behavior.vibrate) {
+            val vibrator = if (android.os.Build.VERSION.SDK_INT >= 31) {
+                val vm = getSystemService(android.content.Context.VIBRATOR_MANAGER_SERVICE) as android.os.VibratorManager
+                vm.defaultVibrator
+            } else {
+                @Suppress("DEPRECATION")
+                getSystemService(android.content.Context.VIBRATOR_SERVICE) as android.os.Vibrator
+            }
+            vibrator.vibrate(
+                android.os.VibrationEffect.createWaveform(longArrayOf(0, 300, 150, 300, 150, 600), -1)
+            )
+        }
+        if (behavior.dimScreen) {
+            val attrs = window.attributes
+            attrs.screenBrightness = 0.05f
+            window.attributes = attrs
         }
     }
 
@@ -311,28 +339,31 @@ class CountdownActivity : AppCompatActivity() {
         }
 
         val input = android.widget.EditText(this).apply {
-            hint = "Enter duress code to cancel"
+            hint = "Enter PIN"
             inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
 
+        // Duress cancel must be indistinguishable from a normal cancel dialog —
+        // identical wording, identical toast, identical finish. The only
+        // difference is the alert keeps running silently.
         AlertDialog.Builder(this)
-            .setTitle("Duress Cancel")
-            .setMessage("Enter your duress code. Alert will appear cancelled but continues silently.")
+            .setTitle("Cancel Alert?")
+            .setMessage("Enter your PIN to cancel this emergency alert?")
             .setView(input)
-            .setPositiveButton("Cancel Alert") { _, _ ->
+            .setPositiveButton("Yes, Cancel") { _, _ ->
                 if (input.text.toString() == duressCode) {
-                    // Duress cancel — alert continues silently
-                    Toast.makeText(this, "Alert cancelled (but tracking continues)", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Alert cancelled", Toast.LENGTH_SHORT).show()
+                    // Duress path: alert keeps running, logged as duress.
+                    AlertDispatchService.dispatchAlert(this, triggerType, isSilent = true, isDuress = true)
                     finish()
                 } else {
                     Toast.makeText(this, "Wrong code", Toast.LENGTH_SHORT).show()
-                    // Restart countdown
                     lifecycleScope.launch {
                         if (isSilent) setupSilentCountdown() else setupVisibleCountdown()
                     }
                 }
             }
-            .setNegativeButton("Keep Alert") { dialog, _ ->
+            .setNegativeButton("No, Keep") { dialog, _ ->
                 dialog.dismiss()
                 lifecycleScope.launch {
                     if (isSilent) setupSilentCountdown() else setupVisibleCountdown()
