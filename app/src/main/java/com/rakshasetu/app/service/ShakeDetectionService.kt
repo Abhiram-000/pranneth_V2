@@ -202,12 +202,7 @@ class ShakeDetectionService : Service(), ShakeDetector.ShakeListener {
 
         Log.w(TAG, "SHAKE DETECTED! eventCount=$eventCount — launching countdown")
 
-        // Launch countdown activity
-        val intent = Intent(this, CountdownActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION)
-            putExtra(CountdownActivity.EXTRA_TRIGGER_TYPE, "shake")
-        }
-        startActivity(intent)
+        TriggerLauncher.launchCountdown(this, "shake")
     }
 
     override fun onShakePatternInvalid() {
