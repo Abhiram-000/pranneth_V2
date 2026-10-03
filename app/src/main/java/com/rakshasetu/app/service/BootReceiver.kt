@@ -30,6 +30,8 @@ class BootReceiver : BroadcastReceiver() {
             } else {
                 Log.d("BootReceiver", "Skipping restart: onboarding=$onboardingComplete, service=$serviceEnabled")
             }
+            // Always (re)arm the watchdog after boot.
+            com.rakshasetu.app.worker.WatchdogScheduler.schedule(context)
         }
     }
 }

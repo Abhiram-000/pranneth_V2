@@ -10,6 +10,8 @@ import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
+import com.rakshasetu.app.worker.WatchdogScheduler
+
 @HiltAndroidApp
 class RakshaSetuApp : Application(), Configuration.Provider {
 
@@ -24,6 +26,7 @@ class RakshaSetuApp : Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannels()
+        WatchdogScheduler.schedule(this)
     }
 
     private fun createNotificationChannels() {

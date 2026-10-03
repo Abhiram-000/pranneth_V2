@@ -108,11 +108,15 @@ class ShakeDetectionService : Service(), ShakeDetector.ShakeListener {
 
         when (intent?.action) {
             ACTION_START -> {
+                getSharedPreferences("rakshasetu_prefs", MODE_PRIVATE)
+                    .edit().putBoolean("monitoring_enabled", true).apply()
                 startForeground(NOTIFICATION_ID, createNotification(),
                     android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
                 startDetection()
             }
             ACTION_STOP -> {
+                getSharedPreferences("rakshasetu_prefs", MODE_PRIVATE)
+                    .edit().putBoolean("monitoring_enabled", false).apply()
                 stopDetection()
                 stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()
