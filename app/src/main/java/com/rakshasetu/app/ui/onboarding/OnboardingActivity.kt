@@ -14,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.rakshasetu.app.R
+import com.rakshasetu.app.data.repository.ContactRepository
 import com.rakshasetu.app.data.repository.PreferencesRepository
+import com.rakshasetu.app.util.SmsVerificationHelper
 import com.rakshasetu.app.databinding.ActivityOnboardingBinding
 import com.rakshasetu.app.ui.adapter.OnboardingPagerAdapter
 import com.rakshasetu.app.ui.calibration.CalibrationActivity
@@ -29,6 +31,7 @@ import javax.inject.Inject
 class OnboardingActivity : AppCompatActivity() {
 
     @Inject lateinit var preferencesRepository: PreferencesRepository
+    @Inject lateinit var contactRepository: ContactRepository
 
     private lateinit var binding: ActivityOnboardingBinding
     private lateinit var pagerAdapter: OnboardingPagerAdapter
@@ -202,6 +205,23 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun completeOnboarding() {
         preferencesRepository.completeOnboarding()
+        // Non-blocking verification: send one clearly-labeled TEST SMS to the
+        // first emergency contact so they recognize what a real alert looks like.
+        kotlinx.coroutines.MainScope().launch {
+            try {
+                val contacts = contactRepository.getAllContactsList()
+                if (contacts.isNotEmpty()) {
+                    SmsVerificationHelper().sendTestSms(this@OnboardingActivity, contacts.first(), 777)
+                    Toast.makeText(
+                        this@OnboardingActivity,
+                        "TEST SMS sent to ${contacts.first().name} — real alerts look the same",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } catch (_: Exception) {
+                // Never block finishing onboarding if the test SMS can't go out.
+            }
+        }
         startActivity(Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         })
