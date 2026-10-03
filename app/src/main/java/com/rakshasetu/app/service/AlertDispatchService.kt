@@ -151,7 +151,8 @@ class AlertDispatchService : LifecycleService() {
                 longitude = location?.longitude,
                 accuracy = location?.accuracy,
                 batteryLevel = batteryLevel,
-                hasData = hasData
+                hasData = hasData,
+                provider = location?.provider
             )
 
             Log.d(TAG, "Alert message: $message")

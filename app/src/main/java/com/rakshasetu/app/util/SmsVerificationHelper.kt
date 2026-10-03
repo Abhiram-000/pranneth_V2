@@ -41,11 +41,13 @@ object SmsVerificationHelper {
         accuracy: Float?,
         batteryLevel: Int?,
         hasData: Boolean,
-        isBatteryLow: Boolean = false
+        isBatteryLow: Boolean = false,
+        provider: String? = null
     ): String {
         val locationText = if (latitude != null && longitude != null) {
-            val accuracyText = if (accuracy != null && accuracy > 0) " (~${accuracy.toInt()}m)" else ""
-            "https://maps.google.com/?q=$latitude,$longitude$accuracyText"
+            val accuracyText = if (accuracy != null && accuracy > 0) " (accurate to ~${accuracy.toInt()}m)" else ""
+            val sourceText = if (provider == "network") " — network estimate" else ""
+            "https://maps.google.com/?q=$latitude,$longitude$accuracyText$sourceText"
         } else {
             "Location unavailable — please call immediately"
         }

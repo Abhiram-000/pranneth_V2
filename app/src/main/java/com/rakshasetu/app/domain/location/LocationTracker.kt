@@ -418,9 +418,7 @@ class LocationTracker @Inject constructor(
      * Formats a location for SMS messages.
      */
     fun formatLocationForSms(location: Location?): String {
-        if (location == null) return "Location unavailable"
-        val accuracyText = if (location.accuracy > 0) " (~${location.accuracy.toInt()}m)" else ""
-        return "${location.latitude},${location.longitude}$accuracyText"
+        return LocationSmsFormatter.format(location?.latitude, location?.longitude, location?.accuracy, location?.provider)
     }
 
     private fun isLocationFresh(location: Location): Boolean {
