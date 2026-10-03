@@ -66,7 +66,18 @@ class AddContactActivity : AppCompatActivity() {
             val relation = binding.dropdownRelation.text.toString()
             val customRelation = binding.etCustomRelation.text.toString().trim()
 
-            if (!validateInputs(name, phone, countryCode, relation)) return@setOnClickListener
+            val validation = com.rakshasetu.app.domain.contacts.ContactValidator.validate(
+                name, phone, countryCode, relation, customRelation
+            )
+            if (!validation.isValid) {
+                when {
+                    name.isBlank() -> binding.etName.error = validation.error
+                    relation == "Other" && customRelation.isBlank() -> binding.etCustomRelation.error = validation.error
+                    countryCode.isBlank() -> binding.etCountryCode.error = validation.error
+                    else -> binding.etPhone.error = validation.error
+                }
+                return@setOnClickListener
+            }
 
             val contact = EmergencyContact(
                 id = if (editingContactId != -1L) editingContactId else 0,
