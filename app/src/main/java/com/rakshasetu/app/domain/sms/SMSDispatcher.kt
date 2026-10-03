@@ -20,7 +20,14 @@ import javax.inject.Singleton
 class SMSDispatcher @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    private fun getSmsManager(): SmsManager {
+    private fun getSmsManager(useSecondarySim: Boolean = false): SmsManager {
+        if (useSecondarySim && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val sm = context.getSystemService(android.telephony.SubscriptionManager::class.java)
+            val infos = sm?.activeSubscriptionInfoList
+            if (infos != null && infos.size >= 2) {
+                return SmsManager.getSmsManagerForSubscriptionId(infos[1].subscriptionId)
+            }
+        }
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             context.getSystemService(SmsManager::class.java)
         } else {
@@ -37,10 +44,11 @@ class SMSDispatcher @Inject constructor(
         contact: EmergencyContact,
         message: String,
         sentRequestCode: Int,
-        deliveredRequestCode: Int
+        deliveredRequestCode: Int,
+        useSecondarySim: Boolean = false
     ): Boolean {
         return try {
-            val smsManager = getSmsManager()
+            val smsManager = getSmsManager(useSecondarySim)
             val parts = smsManager.divideMessage(message)
 
             if (parts != null && parts.size > 1) {

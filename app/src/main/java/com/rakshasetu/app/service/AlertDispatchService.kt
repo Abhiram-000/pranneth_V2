@@ -20,6 +20,7 @@ import com.rakshasetu.app.domain.call.CallManager
 import com.rakshasetu.app.domain.escalation.EscalationManager
 import com.rakshasetu.app.domain.location.LocationTracker
 import com.rakshasetu.app.domain.sms.SMSDispatcher
+import com.rakshasetu.app.domain.sms.SmsRetryScheduler
 import com.rakshasetu.app.data.repository.AlertRepository
 import com.rakshasetu.app.data.repository.ContactRepository
 import com.rakshasetu.app.data.repository.PreferencesRepository
@@ -226,24 +227,44 @@ class AlertDispatchService : LifecycleService() {
         alertId: Long,
         sentCount: Int
     ): Boolean {
-        val maxRetries = 3
-        val retryDelays = longArrayOf(10_000L, 30_000L, 90_000L)
+        val retryDelays = SmsRetryScheduler.plan()
+        val dualSim = hasDualSim()
 
-        for (attempt in 0 until maxRetries) {
+        for (attempt in retryDelays.indices) {
             val success = smsDispatcher.sendSms(
                 contact = contact,
                 message = message,
                 sentRequestCode = sentCount * 100 + attempt,
-                deliveredRequestCode = sentCount * 100 + attempt + 50
+                deliveredRequestCode = sentCount * 100 + attempt + 50,
+                useSecondarySim = SmsRetryScheduler.subscriptionIndexForAttempt(attempt, dualSim) == 1
             )
 
             if (success) return true
 
-            if (attempt < maxRetries - 1) {
+            if (attempt < retryDelays.size - 1) {
                 delay(retryDelays[attempt])
             }
         }
+        // Final attempt on the secondary SIM (dual-SIM only), after the last backoff.
+        if (dualSim) {
+            delay(retryDelays.last())
+            val success = smsDispatcher.sendSms(
+                contact = contact,
+                message = message,
+                sentRequestCode = sentCount * 100 + 90,
+                deliveredRequestCode = sentCount * 100 + 95,
+                useSecondarySim = true
+            )
+            if (success) return true
+        }
         return false
+    }
+
+    private fun hasDualSim(): Boolean {
+        return try {
+            val sm = getSystemService(android.content.Context.TELEPHONY_SUBSCRIPTION_SERVICE) as android.telephony.SubscriptionManager?
+            (sm?.activeSubscriptionInfoCount ?: 0) >= 2
+        } catch (_: Exception) { false }
     }
 
     @SuppressLint("MissingPermission")
