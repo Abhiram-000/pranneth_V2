@@ -49,6 +49,8 @@ class AirplaneModeReceiver : BroadcastReceiver() {
                             action = AlertDispatchService.ACTION_DISPATCH_ALERT
                             putExtra(AlertDispatchService.EXTRA_ALERT_ID, alertId)
                             putExtra(AlertDispatchService.EXTRA_IS_AIRPLANE_MODE, true)
+                            putExtra(AlertDispatchService.EXTRA_TRIGGER_TYPE, AlertLog.TRIGGER_AIRPLANE)
+                            putExtra(AlertDispatchService.EXTRA_IS_SILENT, true)
                         }
                         context.startForegroundService(dispatchIntent)
                     }

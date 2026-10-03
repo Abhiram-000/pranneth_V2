@@ -21,6 +21,7 @@ import com.rakshasetu.app.domain.escalation.EscalationManager
 import com.rakshasetu.app.domain.location.LocationTracker
 import com.rakshasetu.app.domain.sms.SMSDispatcher
 import com.rakshasetu.app.domain.sms.SmsRetryScheduler
+import com.rakshasetu.app.domain.AlertDebounce
 import com.rakshasetu.app.data.repository.AlertRepository
 import com.rakshasetu.app.data.repository.ContactRepository
 import com.rakshasetu.app.data.repository.PreferencesRepository
@@ -59,6 +60,8 @@ class AlertDispatchService : LifecycleService() {
         const val EXTRA_IS_DURESS = "is_duress"
         const val EXTRA_ALERT_ID = "alert_id"
         const val EXTRA_IS_AIRPLANE_MODE = "is_airplane_mode"
+        private const val MIN_DISPATCH_GAP_MS = 60_000L
+        @Volatile private var lastDispatchMs: Long = 0L
 
         fun dispatchAlert(context: Context, triggerType: String, isSilent: Boolean = false, isDuress: Boolean = false) {
             val intent = Intent(context, AlertDispatchService::class.java).apply {
@@ -100,7 +103,13 @@ class AlertDispatchService : LifecycleService() {
                 val isSilent = intent.getBooleanExtra(EXTRA_IS_SILENT, false)
                 val isDuress = intent.getBooleanExtra(EXTRA_IS_DURESS, false)
                 lifecycleScope.launch {
-                    dispatchAlert(triggerType, isSilent, isDuress)
+                    val now = System.currentTimeMillis()
+                    if (AlertDebounce.shouldAllow(lastDispatchMs, now, MIN_DISPATCH_GAP_MS)) {
+                        lastDispatchMs = now
+                        dispatchAlert(triggerType, isSilent, isDuress)
+                    } else {
+                        Log.w(TAG, "Dispatch debounced (within ${MIN_DISPATCH_GAP_MS}ms of last alert)")
+                    }
                 }
             }
         }
