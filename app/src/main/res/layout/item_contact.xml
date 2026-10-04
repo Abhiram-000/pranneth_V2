@@ -85,32 +85,32 @@
 
             <ImageButton
                 android:id="@+id/btnTest"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_test"
                 android:background="@drawable/bg_glass_card"
-                android:padding="6dp"
+                android:padding="12dp"
                 android:contentDescription="Send test alert"
                 android:scaleType="centerInside" />
 
             <ImageButton
                 android:id="@+id/btnEdit"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_edit"
                 android:background="@drawable/bg_glass_card"
-                android:padding="6dp"
+                android:padding="12dp"
                 android:contentDescription="Edit contact"
                 android:scaleType="centerInside"
                 android:layout_marginTop="4dp" />
 
             <ImageButton
                 android:id="@+id/btnDelete"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_delete"
                 android:background="@drawable/bg_glass_card"
-                android:padding="6dp"
+                android:padding="12dp"
                 android:contentDescription="Delete contact"
                 android:scaleType="centerInside"
                 android:layout_marginTop="4dp" />
