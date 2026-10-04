@@ -39,17 +39,13 @@ class ContactListActivity : AppCompatActivity(), ContactAdapter.OnContactActionL
         observeContacts()
     }
 
-    private fun setupToolbar() {
-        binding.toolbar.setNavigationOnClickListener { finish() }
-    }
-
     private fun setupRecyclerView() {
         adapter = ContactAdapter(this)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
 
-        // Drag-to-reorder
-        val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+        // Drag-to-reorder priority: one drag, one save — no "apply" button.
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0
         ) {
             override fun onMove(
@@ -57,22 +53,33 @@ class ContactListActivity : AppCompatActivity(), ContactAdapter.OnContactActionL
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                val fromPos = viewHolder.adapterPosition
-                val toPos = target.adapterPosition
+                val fromPos = viewHolder.bindingAdapterPosition
+                val toPos = target.bindingAdapterPosition
+                if (fromPos == RecyclerView.NO_POSITION || toPos == RecyclerView.NO_POSITION) return false
                 adapter.moveItem(fromPos, toPos)
                 return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
 
+            override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                super.onSelectedChanged(viewHolder, actionState)
+                // Tactile drag feedback: the lifted row dims, nothing else moves.
+                viewHolder?.itemView?.alpha = if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) 0.6f else 1f
+            }
+
             override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
                 super.clearView(recyclerView, viewHolder)
+                viewHolder.itemView.alpha = 1f
                 lifecycleScope.launch {
                     contactRepository.reorderContacts(adapter.currentList)
                 }
             }
-        })
-        touchHelper.attachToRecyclerView(binding.recyclerView)
+        }).attachToRecyclerView(binding.recyclerView)
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.setNavigationOnClickListener { finish() }
     }
 
     private fun setupAddButton() {
@@ -89,7 +96,9 @@ class ContactListActivity : AppCompatActivity(), ContactAdapter.OnContactActionL
         lifecycleScope.launch {
             contactRepository.getAllContacts().collectLatest { contacts ->
                 adapter.submitList(contacts)
-                binding.tvEmptyState.visibility = if (contacts.isEmpty()) {
+                // Toggle the whole empty-state block, not just its text, so the
+                // icon and heading never linger over a populated list.
+                binding.layoutEmpty.visibility = if (contacts.isEmpty()) {
                     android.view.View.VISIBLE
                 } else {
                     android.view.View.GONE

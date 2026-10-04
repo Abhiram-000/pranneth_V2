@@ -4,59 +4,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_gradient_dark"
-    android:gravity="center"
-    android:padding="32dp">
+    android:paddingHorizontal="@dimen/space_2">
 
-    <com.google.android.material.card.MaterialCardView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/glass_card_solid"
-        app:strokeColor="@color/glass_border"
-        app:strokeWidth="1dp"
-        android:padding="32dp">
+        android:text="Background survival"
+        android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2"
+        android:text="Your phone's battery saver will kill the sensor"
+        android:textAppearance="@style/TextAppearance.RS.H1" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_3"
+        android:text="On most phones, especially Xiaomi, Vivo, Oppo and Realme, the OS stops background apps after a few hours. Two minutes of setup keeps shake detection alive."
+        android:textAppearance="@style/TextAppearance.RS.Body" />
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.RS.Card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center">
+            android:padding="@dimen/space_4">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Battery Optimization"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:fontFamily="sans-serif-medium" />
-
-            <View
-                android:layout_width="40dp"
-                android:layout_height="3dp"
-                android:background="@color/md_theme_primary"
-                android:layout_marginTop="16dp"
-                android:alpha="0.5" />
-
-            <TextView
+                android:id="@+id/tvManufacturer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="On many Android devices, battery optimization can kill safety apps in the background."
-                android:textSize="14sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="24dp"
-                android:gravity="center" />
+                android:textAppearance="@style/TextAppearance.RS.Eyebrow"
+                android:textColor="@color/accent" />
 
             <TextView
+                android:id="@+id/tvBatterySteps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="We'll guide you through disabling it for RakshaSetu so it works reliably when you need it."
-                android:textSize="14sp"
-                android:textColor="@color/text_glass"
-                android:layout_marginTop="12dp"
-                android:gravity="center" />
+                android:layout_marginTop="@dimen/space_2"
+                android:lineSpacingMultiplier="1.35"
+                android:textAppearance="@style/TextAppearance.RS.Body" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
 </LinearLayout>

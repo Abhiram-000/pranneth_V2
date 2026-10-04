@@ -4,59 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_gradient_dark"
-    android:gravity="center"
-    android:padding="32dp">
+    android:paddingHorizontal="@dimen/space_2">
 
-    <com.google.android.material.card.MaterialCardView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/glass_card_solid"
-        app:strokeColor="@color/glass_border"
-        app:strokeWidth="1dp"
-        android:padding="32dp">
+        android:text="Last step"
+        android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2"
+        android:text="Calibrate your shake"
+        android:textAppearance="@style/TextAppearance.RS.H1" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gesture Calibration"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:fontFamily="sans-serif-medium" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_3"
+        android:text="Everyone shakes differently. Thirty seconds of practice sets the threshold to your grip and strength — so it fires when you mean it, and stays quiet when you don't."
+        android:textAppearance="@style/TextAppearance.RS.Body" />
 
-            <View
-                android:layout_width="40dp"
-                android:layout_height="3dp"
-                android:background="@color/md_theme_primary"
-                android:layout_marginTop="16dp"
-                android:alpha="0.5" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Practice your emergency shake gesture so we can tune the sensitivity for your phone, grip, and strength."
-                android:textSize="14sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="24dp"
-                android:gravity="center" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="This dramatically reduces false positives."
-                android:textSize="14sp"
-                android:textColor="@color/text_glass"
-                android:layout_marginTop="12dp"
-                android:gravity="center" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

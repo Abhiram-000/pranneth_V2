@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cd_alert_history">Open alert history</string>
+    <string name="cd_sos">Start the safety countdown</string>
+    <string name="cd_back">Go back</string>
+    <string name="cd_add_contact">Add an emergency contact</string>
+</resources>

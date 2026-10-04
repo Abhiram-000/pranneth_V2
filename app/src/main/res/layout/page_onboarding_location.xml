@@ -4,59 +4,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_gradient_dark"
-    android:gravity="center"
-    android:padding="32dp">
+    android:paddingHorizontal="@dimen/space_2">
 
-    <com.google.android.material.card.MaterialCardView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/glass_card_solid"
-        app:strokeColor="@color/glass_border"
-        app:strokeWidth="1dp"
-        android:padding="32dp">
+        android:text="Location"
+        android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2"
+        android:text="Turn location on"
+        android:textAppearance="@style/TextAppearance.RS.H1" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_3"
+        android:text="An alert without a location is far less useful. If GPS can't get a fix indoors, the app falls back to a network estimate and says so."
+        android:textAppearance="@style/TextAppearance.RS.Body" />
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.RS.Card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Location Services"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:fontFamily="sans-serif-medium" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/space_4">
 
             <View
-                android:layout_width="40dp"
-                android:layout_height="3dp"
-                android:background="@color/md_theme_primary"
-                android:layout_marginTop="16dp"
-                android:alpha="0.5" />
+                android:id="@+id/dotLocation"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="@drawable/bg_dot_idle" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tvLocationStatus"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Location services must be enabled to share your GPS coordinates during emergencies."
-                android:textSize="14sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="24dp"
-                android:gravity="center" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="We'll also need background location access so we can continue tracking during an active alert."
-                android:textSize="14sp"
-                android:textColor="@color/text_glass"
-                android:layout_marginTop="12dp"
-                android:gravity="center" />
+                android:layout_marginStart="@dimen/space_3"
+                android:layout_weight="1"
+                android:text="Checking location services…"
+                android:textAppearance="@style/TextAppearance.RS.H3" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
 </LinearLayout>

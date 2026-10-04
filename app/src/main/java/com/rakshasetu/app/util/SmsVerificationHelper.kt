@@ -54,7 +54,7 @@ object SmsVerificationHelper {
 
         val batteryText = buildString {
             batteryLevel?.let { append("Battery: $it%") }
-            if (isBatteryLow) append(" ⚠️ LOW")
+            if (isBatteryLow) append(" (LOW)")
         }
 
         return template

@@ -3,118 +3,108 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="16dp"
+    android:layout_marginVertical="@dimen/space_2"
+    app:cardBackgroundColor="@color/surface_raised"
+    app:cardCornerRadius="@dimen/radius_card"
     app:cardElevation="0dp"
-    app:cardBackgroundColor="@color/glass_card_solid"
-    app:strokeColor="@color/glass_border"
-    app:strokeWidth="1dp">
+    app:strokeColor="@color/hairline_default"
+    app:strokeWidth="@dimen/hairline">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:paddingStart="@dimen/space_4"
+        android:paddingTop="@dimen/space_4"
+        android:paddingEnd="@dimen/space_2"
+        android:paddingBottom="@dimen/space_4">
 
-        <!-- Contact Info -->
+        <!-- Priority is functional data: mono, tabular, always aligned -->
+        <TextView
+            android:id="@+id/tvPriority"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@drawable/bg_pill"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.RS.Data"
+            android:textColor="@color/accent" />
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_3"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvContactName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:fontFamily="sans-serif-medium" />
-
-            <TextView
-                android:id="@+id/tvContactPhone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="2dp" />
-
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="6dp">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvContactRelation"
+                    android:id="@+id/tvContactName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="11sp"
-                    android:textColor="@color/md_theme_primary"
-                    android:background="@drawable/bg_glass_primary"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp" />
-
-                <TextView
-                    android:id="@+id/tvPriority"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="11sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginStart="8dp" />
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.RS.H3" />
 
                 <TextView
                     android:id="@+id/tvVerified"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Verified"
-                    android:textSize="11sp"
-                    android:textColor="@color/status_active"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/space_2"
+                    android:text="verified"
+                    android:textAppearance="@style/TextAppearance.RS.Eyebrow"
+                    android:textColor="@color/success_green"
                     android:visibility="gone" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvContactPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textAppearance="@style/TextAppearance.RS.Data" />
+
+            <TextView
+                android:id="@+id/tvContactRelation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.RS.Eyebrow"
+                android:textColor="@color/text_muted" />
         </LinearLayout>
 
-        <!-- Action Buttons - Glass -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
+        <ImageButton
+            android:id="@+id/btnTest"
+            style="@style/Widget.RS.IconButton"
+            android:background="@android:color/transparent"
+            android:contentDescription="Send a test SMS"
+            android:padding="@dimen/space_3"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_test"
+            app:tint="@color/text_secondary" />
 
-            <ImageButton
-                android:id="@+id/btnTest"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_test"
-                android:background="@drawable/bg_glass_card"
-                android:padding="12dp"
-                android:contentDescription="Send test alert"
-                android:scaleType="centerInside" />
+        <ImageButton
+            android:id="@+id/btnEdit"
+            style="@style/Widget.RS.IconButton"
+            android:background="@android:color/transparent"
+            android:contentDescription="Edit contact"
+            android:padding="@dimen/space_3"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_edit"
+            app:tint="@color/text_secondary" />
 
-            <ImageButton
-                android:id="@+id/btnEdit"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_edit"
-                android:background="@drawable/bg_glass_card"
-                android:padding="12dp"
-                android:contentDescription="Edit contact"
-                android:scaleType="centerInside"
-                android:layout_marginTop="4dp" />
-
-            <ImageButton
-                android:id="@+id/btnDelete"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_delete"
-                android:background="@drawable/bg_glass_card"
-                android:padding="12dp"
-                android:contentDescription="Delete contact"
-                android:scaleType="centerInside"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/btnDelete"
+            style="@style/Widget.RS.IconButton"
+            android:background="@android:color/transparent"
+            android:contentDescription="Delete contact"
+            android:padding="@dimen/space_3"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/sos_button" />
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView>

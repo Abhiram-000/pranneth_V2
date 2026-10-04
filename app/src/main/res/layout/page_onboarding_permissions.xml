@@ -4,90 +4,91 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_gradient_dark"
-    android:gravity="center"
-    android:padding="32dp">
+    android:paddingHorizontal="@dimen/space_2">
 
-    <com.google.android.material.card.MaterialCardView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/glass_card_solid"
-        app:strokeColor="@color/glass_border"
-        app:strokeWidth="1dp"
-        android:padding="32dp">
+        android:text="Permissions"
+        android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2"
+        android:text="What RakshaSetu needs, and why"
+        android:textAppearance="@style/TextAppearance.RS.H1" />
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.RS.Card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center">
+            android:padding="@dimen/space_4">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Permissions Needed"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:fontFamily="sans-serif-medium" />
+                android:text="Location"
+                android:textAppearance="@style/TextAppearance.RS.H3" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contacts need to know where you are. Nothing is stored on any server."
+                android:textAppearance="@style/TextAppearance.RS.Body" />
 
             <View
-                android:layout_width="40dp"
-                android:layout_height="3dp"
-                android:background="@color/md_theme_primary"
-                android:layout_marginTop="16dp"
-                android:alpha="0.5" />
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/hairline"
+                android:layout_marginVertical="@dimen/space_3"
+                android:background="@color/hairline_default" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RakshaSetu needs these permissions to protect you:"
-                android:textSize="14sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="24dp"
-                android:gravity="center" />
+                android:text="SMS and phone"
+                android:textAppearance="@style/TextAppearance.RS.H3" />
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                android:gravity="start">
+                android:text="Alerts are sent as a text message and a missed call, so they arrive even without internet."
+                android:textAppearance="@style/TextAppearance.RS.Body" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="SMS — Send emergency alerts to contacts"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_glass"
-                    android:layout_marginTop="8dp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/hairline"
+                android:layout_marginVertical="@dimen/space_3"
+                android:background="@color/hairline_default" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Phone — Make emergency calls to 112"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_glass"
-                    android:layout_marginTop="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notifications"
+                android:textAppearance="@style/TextAppearance.RS.H3" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Location — Share your location during emergencies"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_glass"
-                    android:layout_marginTop="8dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Notifications — Show SOS quick action"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_glass"
-                    android:layout_marginTop="8dp" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Adds the SOS button to your lock screen so you never have to open the app."
+                android:textAppearance="@style/TextAppearance.RS.Body" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tap Continue to grant them."
+        android:textAppearance="@style/TextAppearance.RS.Data" />
 </LinearLayout>

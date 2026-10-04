@@ -1,307 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient_dark"
-    android:clipChildren="false">
+    android:background="@color/countdown_background">
 
-    <!-- Massive SOS glow orb — pulsing background -->
-    <View
-        android:layout_width="450dp"
-        android:layout_height="450dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="-50dp"
-        android:background="@drawable/bg_sos_glow"
-        android:alpha="0.35" />
-
-    <!-- Orange accent glow top-right -->
-    <View
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_gravity="top|end"
-        android:layout_marginTop="-80dp"
-        android:layout_marginEnd="-80dp"
-        android:background="@drawable/bg_glow_orange"
-        android:alpha="0.25" />
-
-    <!-- Visible countdown layout -->
+    <!-- ============ VISIBLE COUNTDOWN (default) ============ -->
     <LinearLayout
         android:id="@+id/layoutCountdownVisual"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
-        android:padding="32dp"
-        android:clipChildren="false"
-        android:visibility="visible">
+        android:paddingHorizontal="@dimen/gutter"
+        android:paddingTop="@dimen/space_10"
+        android:paddingBottom="@dimen/space_8">
 
-        <!-- SOS badge — frosted glass pill -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/glass_sos"
-            app:strokeColor="@color/sos_glass_border"
-            app:strokeWidth="2dp"
-            android:layout_marginBottom="20dp"
-            android:paddingHorizontal="28dp"
-            android:paddingVertical="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="EMERGENCY"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/status_inactive"
-                android:letterSpacing="0.15"
-                android:fontFamily="sans-serif-medium" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Trigger source -->
         <TextView
             android:id="@+id/tvTriggerSource"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Triggered by: Unknown"
-            android:textSize="13sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="24dp" />
-
-        <!-- Countdown timer — giant glass circle -->
-        <FrameLayout
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginBottom="24dp"
-            android:clipChildren="false">
-
-            <!-- Outer glow ring -->
-            <View
-                android:layout_width="220dp"
-                android:layout_height="220dp"
-                android:layout_gravity="center"
-                android:background="@drawable/bg_sos_glow"
-                android:alpha="0.3" />
-
-            <!-- Glass circle container -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                app:cardCornerRadius="100dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/glass_sos"
-                app:strokeColor="@color/sos_glass_border"
-                app:strokeWidth="2.5dp">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tvCountdownNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="10"
-                        android:textSize="80sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/countdown_text"
-                        android:fontFamily="sans-serif-black" />
-                </FrameLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </FrameLayout>
-
-        <!-- Status text -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="EMERGENCY ALERT"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/countdown_text"
-            android:fontFamily="sans-serif-medium"
-            android:letterSpacing="0.1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Alert will be sent to your emergency contacts\nand 112 with your live GPS location"
-            android:textSize="13sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginTop="10dp"
             android:gravity="center"
-            android:lineSpacingExtra="3dp" />
+            android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
 
-        <!-- Location status — glass pill -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/glass_card_solid"
-            app:strokeColor="@color/glass_border"
-            app:strokeWidth="1dp"
-            android:layout_marginTop="16dp"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="8dp">
+        <!-- Countdown numeral: the entire screen's focal point -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <TextView
-                android:id="@+id/tvLocationStatus"
+                android:id="@+id/tvCountdownNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Acquiring GPS fix..."
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary" />
-        </com.google.android.material.card.MaterialCardView>
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-black"
+                android:includeFontPadding="false"
+                android:text="7"
+                android:textColor="@color/countdown_text"
+                android:textSize="@dimen/type_display" />
 
-        <!-- I'm Safe Button — glass green -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="@dimen/space_10"
+                android:text="seconds until contacts are alerted"
+                android:textAppearance="@style/TextAppearance.RS.Body" />
+        </FrameLayout>
+
+        <!-- Location readiness (secondary, must never outshout the CTA) -->
+        <TextView
+            android:id="@+id/tvLocationStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_4"
+            android:gravity="center"
+            android:text="Acquiring GPS fix…"
+            android:textAppearance="@style/TextAppearance.RS.Data" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSafe"
+            style="@style/Widget.RS.Button.Safe"
             android:layout_width="match_parent"
             android:layout_height="72dp"
-            android:text="I'M SAFE"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@color/safe_button"
-            android:layout_marginTop="32dp"
-            app:cornerRadius="24dp"
-            app:strokeColor="#4434D399"
-            app:strokeWidth="1.5dp" />
+            android:text="I'm safe — cancel" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tap to cancel"
-            android:textSize="11sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginTop="14dp" />
+            android:layout_marginTop="@dimen/space_3"
+            android:gravity="center"
+            android:text="Cancel any time before the timer ends"
+            android:textAppearance="@style/TextAppearance.RS.Body" />
     </LinearLayout>
 
-    <!-- Silent countdown layout -->
+    <!-- ============ SILENT COUNTDOWN (covert mode: dim, quiet, no flash) ============ -->
     <LinearLayout
         android:id="@+id/layoutSilentVisual"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:alpha="0.55"
         android:gravity="center"
-        android:padding="32dp"
-        android:clipChildren="false"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/gutter"
         android:visibility="gone">
-
-        <!-- Silent badge — frosted glass -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/glass_card_solid"
-            app:strokeColor="@color/glass_border"
-            app:strokeWidth="1.5dp"
-            android:layout_marginBottom="12dp"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SILENT MODE"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_secondary"
-                android:letterSpacing="0.15"
-                android:fontFamily="sans-serif-medium" />
-        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Alert will be sent silently..."
-            android:textSize="14sp"
-            android:textColor="@color/text_secondary"
-            android:gravity="center"
-            android:layout_marginBottom="32dp" />
+            android:text="Silent countdown"
+            android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
 
-        <!-- Countdown timer — glass circle -->
-        <FrameLayout
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:layout_marginBottom="24dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                app:cardCornerRadius="80dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/glass_card_solid"
-                app:strokeColor="@color/glass_border"
-                app:strokeWidth="2dp">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tvSilentCountdownNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="30"
-                        android:textSize="64sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary"
-                        android:fontFamily="sans-serif-black" />
-                </FrameLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </FrameLayout>
+        <TextView
+            android:id="@+id/tvSilentCountdownNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_4"
+            android:fontFamily="sans-serif-light"
+            android:includeFontPadding="false"
+            android:text="30"
+            android:textColor="@color/countdown_text"
+            android:textSize="56sp" />
 
         <TextView
             android:id="@+id/tvSilentCountdownHint"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="seconds until silent alert"
-            android:textSize="14sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginTop="@dimen/space_4"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.RS.Body" />
 
-        <!-- Location status — glass pill -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/glass_card_solid"
-            app:strokeColor="@color/glass_border"
-            app:strokeWidth="1dp"
-            android:layout_marginTop="12dp"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="8dp">
-
-            <TextView
-                android:id="@+id/tvSilentLocationStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Acquiring GPS fix..."
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Cancel button — glass -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSilentCancel"
+            style="@style/Widget.RS.Button.Secondary"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="CANCEL"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_primary"
-            android:backgroundTint="@color/glass_card_solid"
-            android:layout_marginTop="32dp"
-            app:cornerRadius="20dp"
-            app:strokeColor="@color/glass_border"
-            app:strokeWidth="1.5dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:text="Cancel" />
     </LinearLayout>
-
 </FrameLayout>

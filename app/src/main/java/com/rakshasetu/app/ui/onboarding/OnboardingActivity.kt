@@ -7,6 +7,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -102,9 +104,10 @@ class OnboardingActivity : AppCompatActivity() {
                     requestBackgroundLocation()
                 }
                 2 -> showBatteryOptimization()
-                3 -> nextStep() // Contacts
+                3 -> startActivity(Intent(this, com.rakshasetu.app.ui.contacts.AddContactActivity::class.java))
                 4 -> startActivity(Intent(this, CalibrationActivity::class.java))
                 5 -> completeOnboarding()
+                else -> nextStep()
             }
         }
 
@@ -121,20 +124,51 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun updatePage(position: Int) {
+        // One primary action per screen: the footer button, labelled with the
+        // outcome of THIS step. Page bodies stay informational, so there is
+        // never a second competing CTA.
         binding.btnNext.text = when (position) {
-            0 -> "Grant Permissions"
-            1 -> "Enable Location"
-            2 -> "Configure Battery"
-            3 -> "Add Contacts"
-            4 -> "Calibrate Gestures"
-            5 -> "Start Using App"
-            else -> "Next"
+            0 -> "Grant permissions"
+            1 -> "Enable location"
+            2 -> "Battery settings"
+            3 -> "Add contacts"
+            4 -> "Calibrate"
+            5 -> "Finish setup"
+            else -> "Continue"
         }
         binding.btnSkip.visibility = if (position < 5) android.view.View.VISIBLE else android.view.View.GONE
 
-        val progress = ((position + 1).toFloat() / 6 * 100).toInt()
-        binding.progressIndicator.progress = progress
-        binding.tvProgress.text = "Step ${position + 1} of 6"
+        binding.progressIndicator.progress = ((position + 1).toFloat() / 6 * 100).toInt()
+        binding.tvProgress.text = getString(R.string.onboarding_step, position + 1, 6)
+        binding.viewPager.post { renderPageState(position) }
+    }
+
+    /** Reflects live state on the page body (battery steps, location status). */
+    private fun renderPageState(position: Int) {
+        val page = binding.viewPager.getChildAt(position) ?: return
+        when (position) {
+            1 -> {
+                val on = LocationEnableHelper.isLocationEnabled(this)
+                page.findViewById<View?>(R.id.dotLocation)?.setBackgroundResource(
+                    if (on) R.drawable.bg_dot_active else R.drawable.bg_dot_idle
+                )
+                page.findViewById<TextView?>(R.id.tvLocationStatus)?.text =
+                    if (on) getString(R.string.location_on) else getString(R.string.location_off)
+            }
+            2 -> {
+                val instructions = OEMHelper.getBatteryOptimizationInstructions(this)
+                page.findViewById<TextView?>(R.id.tvManufacturer)?.text = instructions.manufacturer
+                page.findViewById<TextView?>(R.id.tvBatterySteps)?.text =
+                    instructions.steps.joinToString("\n\n") { "• $it" }
+            }
+            3 -> {
+                lifecycleScope.launch {
+                    val count = runCatching { contactRepository.getAllContactsList().size }.getOrDefault(0)
+                    page.findViewById<TextView?>(R.id.tvContactCount)?.text =
+                        resources.getQuantityString(R.plurals.contact_count, count, count)
+                }
+            }
+        }
     }
 
     private fun requestMainPermissions() {

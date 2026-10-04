@@ -1,88 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary Brand Colors -->
-    <color name="primary">#FF6B35</color>
-    <color name="primary_dark">#E55A25</color>
-    <color name="primary_light">#FF8A5C</color>
-    <color name="accent">#FFD166</color>
+    <!--
+        RAKSHASETU DESIGN TOKENS
+        Aesthetic: "instrument-grade safety" — near-black ink base, one ember accent
+        reserved for danger/action, jade for safety, hairline separation instead of
+        stacked glass panels. Glow is functional attention only (the SOS target).
 
-    <!-- SOS Button -->
-    <color name="sos_button">#D32F2F</color>
-    <color name="sos_button_pressed">#B71C1C</color>
+        Token groups: base surfaces · hairlines · text · brand/danger/safe · data
+    -->
 
-    <!-- Safe Button -->
-    <color name="safe_button">#2E7D32</color>
+    <!-- ===== BASE SURFACES ===== -->
+    <color name="surface_base">#0B0F14</color>
+    <color name="surface_sunken">#070A0E</color>
+    <color name="surface_raised">#121821</color>
+    <color name="surface_overlay">#18202B</color>
+    <color name="scrim">#B305070A</color>
 
-    <!-- Background - Deep ocean gradient -->
-    <color name="background">#080E1A</color>
-    <color name="background_gradient_start">#080E1A</color>
-    <color name="background_gradient_mid">#0F1B2E</color>
-    <color name="background_gradient_end">#060A14</color>
+    <!-- ===== HAIRLINES (replaces stacked glass borders) ===== -->
+    <color name="hairline_subtle">#1FFFFFFF</color>
+    <color name="hairline_default">#26FFFFFF</color>
+    <color name="hairline_strong">#3DFFFFFF</color>
 
-    <!-- Glass surfaces - STRONGER glass effect -->
-    <color name="glass_card">#26FFFFFF</color>
-    <color name="glass_card_solid">#1E2D44</color>
-    <color name="glass_border">#40FFFFFF</color>
-    <color name="glass_border_accent">#66FF6B35</color>
+    <!-- ===== TEXT ===== -->
+    <color name="text_primary">#F2F5F8</color>
+    <color name="text_secondary">#A3B0BF</color>
+    <color name="text_muted">#6B7889</color>
+    <color name="text_on_accent">#1A0B07</color>
+    <color name="text_on_danger">#FFF6F4</color>
+    <color name="text_on_safe">#04210F</color>
 
-    <!-- Text on dark glass -->
-    <color name="text_primary">#F0F4F8</color>
-    <color name="text_secondary">#94A3B8</color>
-    <color name="text_accent">#FF8A5C</color>
-    <color name="text_glass">#CBD5E1</color>
+    <!-- ===== BRAND / ACTION ===== -->
+    <color name="accent">#FF6A3D</color>
+    <color name="accent_pressed">#E2542B</color>
+    <color name="accent_muted">#33205A38</color>
+    <color name="accent_hairline">#5AFF6A3D</color>
 
-    <!-- Status -->
-    <color name="status_active">#34D399</color>
-    <color name="status_inactive">#F87171</color>
-    <color name="warning">#FBBF24</color>
-    <color name="success_green">#34D399</color>
-    <color name="warning_orange">#FBBF24</color>
+    <!-- ===== DANGER (SOS) ===== -->
+    <color name="sos_button">#E23D2E</color>
+    <color name="sos_button_pressed">#B62C20</color>
+    <color name="sos_glow">#33E23D2E</color>
+    <color name="sos_hairline">#66E23D2E</color>
 
-    <!-- Countdown -->
-    <color name="countdown_background">#080E1A</color>
-    <color name="countdown_text">#FFFFFF</color>
-    <color name="countdown_text_secondary">#94A3B8</color>
-    <color name="countdown_pulse">#D32F2F</color>
+    <!-- ===== SAFE ===== -->
+    <color name="safe_button">#1FA968</color>
+    <color name="safe_button_pressed">#178054</color>
+    <color name="success_green">#1FA968</color>
 
-    <!-- Glass card variants - STRONGER glow -->
-    <color name="glass_status">#3334D399</color>
-    <color name="glass_warning">#33FBBF24</color>
-    <color name="glass_sos">#33F87171</color>
-    <color name="glass_primary">#33FF6B35</color>
+    <!-- ===== STATUS ===== -->
+    <color name="status_active">#1FA968</color>
+    <color name="status_inactive">#E23D2E</color>
+    <color name="warning">#E0A82E</color>
+    <color name="warning_orange">#E0A82E</color>
+    <color name="status_idle">#6B7889</color>
 
-    <!-- Legacy alias -->
-    <color name="card_background">#1E2D44</color>
+    <!-- ===== DATA / CHROME ===== -->
+    <color name="data_text">#8FA3BC</color>
+    <color name="ripple_light">#1FFFFFFF</color>
 
-    <!-- Divider -->
-    <color name="divider">#40FFFFFF</color>
+    <!-- ===== COUNTDOWN ===== -->
+    <color name="countdown_background">#0B0F14</color>
+    <color name="countdown_text">#F2F5F8</color>
+    <color name="countdown_text_secondary">#A3B0BF</color>
+    <color name="countdown_pulse">#E23D2E</color>
 
-    <!-- Chip background -->
-    <color name="chip_background">#1A3B82F6</color>
-    <color name="chip_text">#93C5FD</color>
-
-    <!-- Gradient overlay for glass effect -->
-    <color name="glass_gradient_top">#00FFFFFF</color>
-    <color name="glass_gradient_bottom">#14FFFFFF</color>
-
-    <!-- Material You compatible colors (dark theme) -->
-    <color name="md_theme_primary">#FF8A5C</color>
+    <!-- ===== LEGACY ALIASES (kept: referenced from Kotlin) ===== -->
+    <color name="background">#0B0F14</color>
+    <color name="primary">#FF6A3D</color>
+    <color name="md_theme_primary">#FF6A3D</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_primaryContainer">#4A2000</color>
-    <color name="md_theme_onPrimaryContainer">#FFDCC8</color>
-    <color name="md_theme_secondary">#C4A882</color>
-    <color name="md_theme_onSecondary">#2B1A00</color>
-    <color name="md_theme_background">#080E1A</color>
-    <color name="md_theme_onBackground">#E2E8F0</color>
-    <color name="md_theme_surface">#1E2D44</color>
-    <color name="md_theme_onSurface">#E2E8F0</color>
-
-    <!-- SOS button glass effect - STRONGER -->
-    <color name="sos_glass">#40F87171</color>
-    <color name="sos_glass_border">#80F87171</color>
-    <color name="sos_glow">#60F87171</color>
-
-    <!-- Ambient glow colors -->
-    <color name="glow_orange">#30FF6B35</color>
-    <color name="glow_blue">#2060A5FA</color>
-    <color name="glow_green">#2034D399</color>
+    <color name="md_theme_secondary">#8FA3BC</color>
+    <color name="md_theme_onSecondary">#0B0F14</color>
+    <color name="md_theme_background">#0B0F14</color>
+    <color name="md_theme_onBackground">#F2F5F8</color>
+    <color name="md_theme_surface">#121821</color>
+    <color name="md_theme_onSurface">#F2F5F8</color>
 </resources>

@@ -58,7 +58,7 @@ class ContactAdapter(
             tvName.text = contact.name
             tvPhone.text = contact.fullPhoneNumber
             tvRelation.text = contact.displayRelation
-            tvPriority.text = "Priority: ${position + 1}"
+            tvPriority.text = (position + 1).toString()
             tvVerified.visibility = if (contact.isVerified) View.VISIBLE else View.GONE
 
             btnEdit.setOnClickListener { listener.onEditClick(contact) }

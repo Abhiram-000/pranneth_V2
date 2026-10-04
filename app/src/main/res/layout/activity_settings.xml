@@ -1,330 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/bg_gradient_dark">
+    android:background="@drawable/bg_gradient_dark"
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
+        style="@style/Widget.RS.Toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/transparent"
-        app:title="Settings"
-        app:titleTextColor="@color/text_primary"
+        android:layout_height="@dimen/toolbar_height"
         app:navigationIcon="@drawable/ic_back"
-        app:navigationIconTint="@color/text_glass" />
+        app:title="Settings" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/gutter"
+        android:paddingBottom="@dimen/space_8">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:orientation="vertical">
 
-            <!-- Trigger Sensitivity - Glass Card -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- ===== TRIGGERS ===== -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/glass_card_solid"
-                app:strokeColor="@color/glass_border"
-                app:strokeWidth="1dp"
-                android:layout_marginBottom="12dp">
+                android:text="Triggers"
+                android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.RS.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_2">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="18dp">
+                    android:padding="@dimen/space_4">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Trigger Sensitivity"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
+                        android:text="Shake sensitivity"
+                        android:textAppearance="@style/TextAppearance.RS.H3" />
 
                     <TextView
                         android:id="@+id/tvSensitivityLabel"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Medium (balanced)"
-                        android:textSize="13sp"
-                        android:textColor="@color/text_secondary"
-                        android:layout_marginTop="4dp" />
+                        android:text="Medium"
+                        android:textAppearance="@style/TextAppearance.RS.Data" />
 
                     <SeekBar
                         android:id="@+id/seekbarSensitivity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_2"
                         android:max="2"
-                        android:progress="1"
-                        android:layout_marginTop="8dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                        android:progressTint="@color/accent"
+                        android:thumbTint="@color/accent" />
 
-            <!-- Countdown Duration - Glass Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/glass_card_solid"
-                app:strokeColor="@color/glass_border"
-                app:strokeWidth="1dp"
-                android:layout_marginBottom="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="18dp">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hairline"
+                        android:layout_marginVertical="@dimen/space_4"
+                        android:background="@color/hairline_default" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Countdown Duration"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
+                        android:text="Countdown length"
+                        android:textAppearance="@style/TextAppearance.RS.H3" />
 
                     <TextView
                         android:id="@+id/tvCountdownLabel"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="7 seconds"
-                        android:textSize="13sp"
-                        android:textColor="@color/text_secondary"
-                        android:layout_marginTop="4dp" />
+                        android:textAppearance="@style/TextAppearance.RS.Data" />
 
                     <SeekBar
                         android:id="@+id/seekbarCountdown"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_2"
                         android:max="12"
-                        android:progress="4"
-                        android:layout_marginTop="8dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                        android:progressTint="@color/accent"
+                        android:thumbTint="@color/accent" />
 
-            <!-- Silent Countdown - Glass Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/glass_card_solid"
-                app:strokeColor="@color/glass_border"
-                app:strokeWidth="1dp"
-                android:layout_marginBottom="12dp">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hairline"
+                        android:layout_marginVertical="@dimen/space_4"
+                        android:background="@color/hairline_default" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="18dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Silent Countdown"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="No visible screen — only vibration"
-                            android:textSize="12sp"
-                            android:textColor="@color/text_secondary" />
-                    </LinearLayout>
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
+                    <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/switchSilentCountdown"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Volume Trigger - Glass Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/glass_card_solid"
-                app:strokeColor="@color/glass_border"
-                app:strokeWidth="1dp"
-                android:layout_marginBottom="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="18dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:minHeight="@dimen/touch_min"
+                        android:text="Silent countdown"
+                        android:textAppearance="@style/TextAppearance.RS.H3" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Volume Button Trigger"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No vibration or flash — the screen dims instead"
+                        android:textAppearance="@style/TextAppearance.RS.Body" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Press Volume Up+Down together"
-                            android:textSize="12sp"
-                            android:textColor="@color/text_secondary" />
-                    </LinearLayout>
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
+                    <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/switchVolumeTrigger"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_4"
+                        android:minHeight="@dimen/touch_min"
+                        android:text="Volume-button trigger"
+                        android:textAppearance="@style/TextAppearance.RS.H3" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Volume Up + Down together, from the lock screen"
+                        android:textAppearance="@style/TextAppearance.RS.Body" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- SMS Template - Glass Card -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- ===== MESSAGE ===== -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/glass_card_solid"
-                app:strokeColor="@color/glass_border"
-                app:strokeWidth="1dp"
-                android:layout_marginBottom="12dp">
+                android:layout_marginTop="@dimen/space_6"
+                android:text="Alert message"
+                android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.RS.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_2">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="18dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Emergency SMS Template"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Use {location}, {battery}, {data_status}, {timestamp}"
-                        android:textSize="11sp"
-                        android:textColor="@color/text_secondary"
-                        android:layout_marginTop="4dp" />
+                    android:padding="@dimen/space_4">
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.RS.TextField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                        android:hint="Template — use {location}, {battery}, {data_status}, {timestamp}">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etSmsTemplate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:minLines="3"
-                            android:gravity="top"
-                            android:inputType="textMultiLine" />
+                            android:gravity="top|start"
+                            android:inputType="textMultiLine"
+                            android:minLines="4"
+                            android:textColor="@color/text_primary"
+                            android:textSize="@dimen/type_body" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSaveTemplate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="Save Template"
-                        android:textSize="12sp"
-                        android:layout_marginTop="8dp"
-                        style="@style/GlassOutlinedButton" />
+                        style="@style/Widget.RS.Button.Secondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_3"
+                        android:text="Save message" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Duress Code - Glass Card -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- ===== DURESS ===== -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/glass_card_solid"
-                app:strokeColor="@color/glass_border"
-                app:strokeWidth="1dp"
-                android:layout_marginBottom="12dp">
+                android:layout_marginTop="@dimen/space_6"
+                android:text="Safety net"
+                android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.RS.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_2">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="18dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Duress Cancel Code"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Enter this code to appear to cancel the alert while it continues silently"
-                        android:textSize="11sp"
-                        android:textColor="@color/text_secondary"
-                        android:layout_marginTop="4dp" />
+                    android:padding="@dimen/space_4">
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.RS.TextField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                        android:hint="Duress PIN (4+ characters)">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etDuressCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPassword" />
+                            android:inputType="textPassword"
+                            android:textColor="@color/text_primary" />
                     </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_2"
+                        android:text="Entering this on the countdown screen looks like a normal cancel — the alert keeps running silently."
+                        android:textAppearance="@style/TextAppearance.RS.Body" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSaveDuressCode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="Save Duress Code"
-                        android:textSize="12sp"
-                        android:layout_marginTop="8dp"
-                        style="@style/GlassOutlinedButton" />
+                        style="@style/Widget.RS.Button.Secondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_3"
+                        android:text="Save PIN" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

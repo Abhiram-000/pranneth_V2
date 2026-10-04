@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var isServiceStarted = false
+    private var hasContacts = false
+    private var missingPermissions: List<String> = emptyList()
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -128,19 +130,30 @@ class MainActivity : AppCompatActivity() {
     private fun observeContactCount() {
         lifecycleScope.launch {
             contactRepository.getContactCount().collectLatest { count ->
-                binding.tvContactCount.text = "$count emergency contact(s) configured"
+                binding.tvContactCount.text = resources.getQuantityString(
+                    R.plurals.contact_count, count, count
+                )
                 binding.btnSos.isEnabled = count > 0
-
-                if (count == 0) {
-                    binding.tvWarning.text = "⚠️ Add at least one emergency contact to enable SOS"
-                    binding.tvWarning.visibility = android.view.View.VISIBLE
-                    binding.layoutWarning.visibility = android.view.View.VISIBLE
-                } else {
-                    binding.tvWarning.visibility = android.view.View.GONE
-                    binding.layoutWarning.visibility = android.view.View.GONE
-                }
+                hasContacts = count > 0
+                renderWarning()
             }
         }
+    }
+
+    /**
+     * One warning banner, composed from every condition that makes the SOS
+     * unreliable. Two independent code paths writing to the same TextView would
+     * clobber each other, and the banner must survive the status refreshes.
+     */
+    private fun renderWarning() {
+        val reasons = buildList {
+            if (!hasContacts) add(getString(R.string.warning_no_contacts))
+            missingPermissions.takeIf { it.isNotEmpty() }?.let {
+                add(getString(R.string.permission_warning, it.joinToString { p -> PermissionHelper.getPermissionDisplayName(p) }))
+            }
+        }
+        binding.tvWarning.text = reasons.joinToString("\n")
+        binding.tvWarning.visibility = if (reasons.isEmpty()) android.view.View.GONE else android.view.View.VISIBLE
     }
 
     override fun onResume() {
@@ -153,14 +166,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkPermissionsAndStart() {
         val status = PermissionHelper.checkAllPermissions(this)
+        missingPermissions = status.missing
         if (status.allGranted) {
             checkLocationAndStart()
         } else {
             permissionLauncher.launch(status.missing.toTypedArray())
-            if (com.rakshasetu.app.domain.PermissionWarningPolicy.shouldWarn(status.missing)) {
-                binding.tvLocationStatus.text = "⚠️ Missing permissions: ${status.missing.joinToString { PermissionHelper.getPermissionDisplayName(it) }} — SOS may not work"
-                binding.tvLocationStatus.setTextColor(ContextCompat.getColor(this, R.color.warning))
-            }
+            missingPermissions = status.missing
+            renderWarning()
         }
 
         // Request background location separately (Android 10+)
@@ -172,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkLocationAndStart() {
         if (!LocationEnableHelper.isLocationEnabled(this)) {
-            binding.tvLocationStatus.text = "⚠️ Location services OFF — tap to enable"
+            binding.tvLocationStatus.text = "Off — tap to enable"
             binding.tvLocationStatus.setTextColor(ContextCompat.getColor(this, R.color.warning))
             binding.tvLocationStatus.setOnClickListener {
                 LocationEnableHelper.promptEnableLocation(this)
@@ -193,7 +205,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 .show()
         } else {
-            binding.tvLocationStatus.text = "✅ ${LocationEnableHelper.getLocationStatusDescription(this)}"
+            binding.tvLocationStatus.text = LocationEnableHelper.getLocationStatusDescription(this)
             binding.tvLocationStatus.setTextColor(ContextCompat.getColor(this, R.color.status_active))
             startSafetyService()
         }
@@ -208,30 +220,37 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateServiceStatus() {
         val isRunning = OEMHelper.isServiceRunning(this, ShakeDetectionService::class.java)
-        binding.tvServiceStatus.text = if (isRunning) "✅ Safety monitoring active" else "⚠️ Safety monitoring inactive"
+        binding.tvServiceStatus.text = if (isRunning) "Monitoring active" else "Monitoring inactive"
         binding.tvServiceStatus.setTextColor(
-            ContextCompat.getColor(this, if (isRunning) R.color.status_active else R.color.status_inactive)
+            ContextCompat.getColor(this, if (isRunning) R.color.text_primary else R.color.text_secondary)
+        )
+        binding.dotService.setBackgroundResource(
+            if (isRunning) R.drawable.bg_dot_active else R.drawable.bg_dot_idle
         )
 
         // Battery optimization status
-        if (!OEMHelper.isBatteryOptimizationDisabled(this)) {
-            binding.tvBatteryStatus.text = "⚠️ Battery optimization may interfere with alerts"
-            binding.tvBatteryStatus.visibility = android.view.View.VISIBLE
+        binding.tvBatteryStatus.text = if (!OEMHelper.isBatteryOptimizationDisabled(this)) {
+            "Battery saver may block alerts"
         } else {
-            binding.tvBatteryStatus.text = "✅ Battery optimization disabled"
-            binding.tvBatteryStatus.visibility = android.view.View.VISIBLE
+            "Battery saver off"
         }
+        binding.tvBatteryStatus.setTextColor(
+            ContextCompat.getColor(
+                this,
+                if (OEMHelper.isBatteryOptimizationDisabled(this)) R.color.success_green else R.color.warning
+            )
+        )
     }
 
     private fun updateAccessibilityStatus() {
         val isEnabled = VolumeKeyAccessibilityService.isEnabled(this)
         binding.tvAccessibilityStatus.text = if (isEnabled) {
-            "✅ Volume button trigger enabled"
+            "Volume-button trigger is on"
         } else {
-            "⚠️ Volume button trigger disabled"
+            "Volume-button trigger is off"
         }
         binding.tvAccessibilityStatus.setTextColor(
-            ContextCompat.getColor(this, if (isEnabled) R.color.status_active else R.color.status_inactive)
+            ContextCompat.getColor(this, if (isEnabled) R.color.text_primary else R.color.text_secondary)
         )
 
         binding.btnEnableAccessibility.setOnClickListener {
@@ -257,10 +276,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateLocationStatus() {
         if (LocationEnableHelper.isLocationEnabled(this)) {
-            binding.tvLocationStatus.text = "✅ ${LocationEnableHelper.getLocationStatusDescription(this)}"
-            binding.tvLocationStatus.setTextColor(ContextCompat.getColor(this, R.color.status_active))
+            binding.tvLocationStatus.text = LocationEnableHelper.getLocationStatusDescription(this)
+            binding.tvLocationStatus.setTextColor(ContextCompat.getColor(this, R.color.success_green))
         } else {
-            binding.tvLocationStatus.text = "⚠️ Location services OFF — tap to enable"
+            binding.tvLocationStatus.text = "Off — tap to enable"
             binding.tvLocationStatus.setTextColor(ContextCompat.getColor(this, R.color.warning))
         }
     }

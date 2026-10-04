@@ -1,329 +1,319 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient_dark"
-    android:clipChildren="false">
-
-    <!-- AMBIENT GLOW ORBS — the signature glassmorphism element -->
-    <!-- Top-right: large warm orange glow -->
-    <View
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:layout_gravity="top|end"
-        android:layout_marginTop="-100dp"
-        android:layout_marginEnd="-120dp"
-        android:background="@drawable/bg_glow_orange"
-        android:alpha="0.4" />
-
-    <!-- Bottom-left: cool blue glow -->
-    <View
-        android:layout_width="350dp"
-        android:layout_height="350dp"
-        android:layout_gravity="bottom|start"
-        android:layout_marginBottom="-80dp"
-        android:layout_marginStart="-80dp"
-        android:background="@drawable/bg_glow_blue"
-        android:alpha="0.3" />
-
-    <!-- Center: subtle SOS red pulse glow -->
-    <View
-        android:id="@+id/viewSosGlow"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="200dp"
-        android:background="@drawable/bg_sos_glow"
-        android:alpha="0" />
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:clipChildren="false">
+        android:paddingHorizontal="@dimen/gutter"
+        android:paddingTop="@dimen/space_8"
+        android:paddingBottom="@dimen/space_8">
 
-        <!-- Top bar — frosted glass strip -->
+        <!-- ============ MASTHEAD: eyebrow + wordmark ============ -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@drawable/bg_glass_gradient_overlay"
-            android:paddingHorizontal="20dp"
-            android:paddingTop="48dp"
-            android:paddingBottom="14dp">
+            android:gravity="center_vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="RakshaSetu"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                android:textColor="@color/md_theme_primary"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.02" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Personal safety"
+                    android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_1"
+                    android:text="RakshaSetu"
+                    android:textAppearance="@style/TextAppearance.RS.H1" />
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/btnAlertHistory"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:src="@drawable/ic_history"
-                android:background="@drawable/bg_glass_card"
-                android:padding="10dp"
-                android:contentDescription="Alert History"
+                android:layout_width="@dimen/icon_button"
+                android:layout_height="@dimen/icon_button"
+                android:background="@drawable/bg_surface"
+                android:contentDescription="@string/cd_alert_history"
+                android:padding="@dimen/space_3"
                 android:scaleType="centerInside"
-                app:tint="@color/text_glass" />
+                android:src="@drawable/ic_history"
+                app:tint="@color/text_secondary" />
         </LinearLayout>
 
-        <ScrollView
+        <!-- ============ STATUS STRIP: dot + label + data ============ -->
+        <LinearLayout
+            android:id="@+id/layoutWarning"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:fillViewport="true"
-            android:clipToPadding="false"
-            android:scrollbars="none"
-            android:overScrollMode="never">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_5"
+            android:background="@drawable/bg_surface"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/status_strip_height"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/space_4"
+            android:paddingVertical="@dimen/space_3">
+
+            <View
+                android:id="@+id/dotService"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/bg_dot_idle" />
+
+            <TextView
+                android:id="@+id/tvServiceStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_3"
+                android:layout_weight="1"
+                android:text="Monitoring off"
+                android:textAppearance="@style/TextAppearance.RS.H3" />
+
+            <TextView
+                android:id="@+id/tvBatteryStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_3"
+                android:maxWidth="128dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:gravity="end"
+                android:textAppearance="@style/TextAppearance.RS.Data" />
+        </LinearLayout>
+
+        <!-- ============ WARNING (permission/accessibility) ============ -->
+        <TextView
+            android:id="@+id/tvWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_3"
+            android:background="@drawable/bg_surface"
+            android:paddingHorizontal="@dimen/space_4"
+            android:paddingVertical="@dimen/space_3"
+            android:textAppearance="@style/TextAppearance.RS.Body"
+            android:textColor="@color/warning"
+            android:visibility="gone" />
+
+        <!-- ============ SOS TARGET (the memorable element) ============ -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_8"
+            android:minHeight="@dimen/sos_target_size">
+
+            <TextView
+                android:id="@+id/btnSos"
+                android:layout_width="@dimen/sos_target_size"
+                android:layout_height="@dimen/sos_target_size"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_sos_target"
+                android:contentDescription="@string/cd_sos"
+                android:focusable="true"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:letterSpacing="0.06"
+                android:stateListAnimator="@animator/sos_press"
+                android:text="SOS"
+                android:textColor="@color/text_on_danger"
+                android:textSize="40sp" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_4"
+            android:gravity="center"
+            android:text="Tap to start the countdown"
+            android:textAppearance="@style/TextAppearance.RS.Body" />
+
+        <!-- ============ READINESS ============ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_6"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="16dp"
-                android:paddingBottom="24dp"
-                android:clipChildren="false">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <!-- Warning Banner — glass with orange accent -->
-                <LinearLayout
-                    android:id="@+id/layoutWarning"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+                <TextView
+                    android:id="@+id/tvLocationStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_glass_warning"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/tvWarning"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Add at least one emergency contact"
-                        android:textSize="14sp"
-                        android:textColor="@color/warning"
-                        android:gravity="center"
-                        android:fontFamily="sans-serif-medium" />
-                </LinearLayout>
-
-                <!-- Status Card — glass with frosted effect -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/glass_card_solid"
-                    app:strokeColor="@color/glass_border"
-                    app:strokeWidth="1.5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="System Status"
-                            android:textSize="17sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary"
-                            android:fontFamily="sans-serif-medium" />
-
-                        <TextView
-                            android:id="@+id/tvServiceStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Checking..."
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="14dp" />
-
-                        <TextView
-                            android:id="@+id/tvAccessibilityStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Checking..."
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="8dp" />
-
-                        <TextView
-                            android:id="@+id/tvLocationStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Checking..."
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="8dp"
-                            android:clickable="true"
-                            android:focusable="true" />
-
-                        <TextView
-                            android:id="@+id/tvBatteryStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="8dp"
-                            android:visibility="gone" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnEnableAccessibility"
-                            android:layout_width="wrap_content"
-                            android:layout_height="38dp"
-                            android:text="Enable Volume Trigger"
-                            android:textSize="12sp"
-                            android:layout_marginTop="12dp"
-                            android:visibility="gone"
-                            style="@style/GlassOutlinedButton" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Contacts Card — glass -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/glass_card_solid"
-                    app:strokeColor="@color/glass_border"
-                    app:strokeWidth="1.5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="20dp"
-                        android:gravity="center_vertical">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Emergency Contacts"
-                                android:textSize="17sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/text_primary"
-                                android:fontFamily="sans-serif-medium" />
-
-                            <TextView
-                                android:id="@+id/tvContactCount"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0 contacts"
-                                android:textSize="13sp"
-                                android:textColor="@color/text_secondary"
-                                android:layout_marginTop="4dp" />
-                        </LinearLayout>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnManageContacts"
-                            android:layout_width="wrap_content"
-                            android:layout_height="38dp"
-                            android:text="Manage"
-                            android:textSize="13sp"
-                            style="@style/GlassOutlinedButton" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Quick Actions — glass buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="12dp">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCalibration"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
-                        android:layout_weight="1"
-                        android:text="Calibrate"
-                        android:textSize="13sp"
-                        android:layout_marginEnd="6dp"
-                        style="@style/GlassOutlinedButton" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSettings"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
-                        android:layout_weight="1"
-                        android:text="Settings"
-                        android:textSize="13sp"
-                        android:layout_marginStart="6dp"
-                        style="@style/GlassOutlinedButton" />
-                </LinearLayout>
-
-                <!-- Emergency Call — glass with red accent -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCall112"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:text="Call 112 Emergency"
-                    android:textSize="13sp"
-                    android:layout_marginTop="12dp"
-                    android:textColor="@color/status_inactive"
-                    style="@style/GlassOutlinedButton"
-                    app:strokeColor="@color/status_inactive" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <!-- SOS Button — the hero element -->
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:clipChildren="false">
-
-                    <!-- Animated glow ring behind button -->
-                    <View
-                        android:id="@+id/viewSosGlowBehind"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/bg_sos_glow"
-                        android:alpha="0.4" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSos"
-                        android:layout_width="match_parent"
-                        android:layout_height="140dp"
-                        android:text="SOS"
-                        android:textSize="36sp"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white"
-                        android:backgroundTint="@color/sos_button"
-                        android:enabled="false"
-                        app:cornerRadius="32dp"
-                        app:strokeColor="@color/sos_glass_border"
-                        app:strokeWidth="2dp" />
-                </FrameLayout>
-
+                    android:layout_marginTop="@dimen/space_1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Checking…"
+                    android:textAppearance="@style/TextAppearance.RS.Data" />
             </LinearLayout>
-        </ScrollView>
+
+            <View
+                android:layout_width="@dimen/hairline"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/space_4"
+                android:background="@color/hairline_default" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contacts"
+                    android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+                <TextView
+                    android:id="@+id/tvContactCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_1"
+                    android:text="0 contacts"
+                    android:textAppearance="@style/TextAppearance.RS.Data" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ============ ACCESSIBILITY TRIGGER ============ -->
+        <TextView
+            android:id="@+id/tvAccessibilityStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_4"
+            android:background="@drawable/bg_pill"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="@dimen/space_4"
+            android:paddingVertical="@dimen/space_3"
+            android:text="Volume-button trigger off"
+            android:textAppearance="@style/TextAppearance.RS.Body" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEnableAccessibility"
+            style="@style/Widget.RS.Button.Secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_2"
+            android:text="Enable volume trigger" />
+
+        <!-- ============ QUICK ACTIONS (thumb-zone tiles) ============ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_8"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/btnManageContacts"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/quick_tile_height"
+                android:layout_marginEnd="@dimen/space_2"
+                android:layout_weight="1"
+                android:background="@drawable/bg_surface"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_contacts"
+                    app:tint="@color/accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_2"
+                    android:text="Contacts"
+                    android:textAppearance="@style/TextAppearance.RS.H3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnCalibration"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/quick_tile_height"
+                android:layout_marginHorizontal="@dimen/space_2"
+                android:layout_weight="1"
+                android:background="@drawable/bg_surface"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_calibrate"
+                    app:tint="@color/accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_2"
+                    android:text="Calibrate"
+                    android:textAppearance="@style/TextAppearance.RS.H3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnSettings"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/quick_tile_height"
+                android:layout_marginStart="@dimen/space_2"
+                android:layout_weight="1"
+                android:background="@drawable/bg_surface"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_settings"
+                    app:tint="@color/accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_2"
+                    android:text="Settings"
+                    android:textAppearance="@style/TextAppearance.RS.H3" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ============ EMERGENCY LINE ============ -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCall112"
+            style="@style/Widget.RS.Button.Danger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_4"
+            android:text="Call 112 now" />
     </LinearLayout>
-</FrameLayout>
+</ScrollView>

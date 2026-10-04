@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ===== TYPOGRAPHY =====
+         Eyebrow labels are uppercase + tracked; data (timestamps, coordinates,
+         durations) is monospace so numbers align and read as instrument output. -->
+
+    <style name="TextAppearance.RS.Display" parent="TextAppearance.Material3.DisplayLarge">
+        <item name="android:textSize">@dimen/type_display</item>
+        <item name="android:textColor">@color/countdown_text</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="TextAppearance.RS.H1" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textSize">@dimen/type_h1</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <style name="TextAppearance.RS.H2" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textSize">@dimen/type_h2</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.RS.H3" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">@dimen/type_h3</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.RS.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">@dimen/type_body</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:lineSpacingMultiplier">1.25</item>
+    </style>
+
+    <style name="TextAppearance.RS.Eyebrow" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">@dimen/type_label</item>
+        <item name="android:textColor">@color/text_muted</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.14</item>
+    </style>
+
+    <style name="TextAppearance.RS.Data" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">@dimen/type_data</item>
+        <item name="android:textColor">@color/data_text</item>
+        <item name="android:fontFamily">monospace</item>
+    </style>
+
+    <!-- ===== SURFACES ===== -->
+
+    <style name="Widget.RS.Card" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">@color/surface_raised</item>
+        <item name="cardCornerRadius">@dimen/radius_card</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/hairline_default</item>
+        <item name="strokeWidth">@dimen/hairline</item>
+        <item name="rippleColor">@color/ripple_light</item>
+    </style>
+
+    <style name="Widget.RS.Card.Inset" parent="Widget.RS.Card">
+        <item name="cardBackgroundColor">@color/surface_sunken</item>
+        <item name="cardCornerRadius">@dimen/radius_control</item>
+    </style>
+
+    <!-- ===== CONTROLS ===== -->
+
+    <style name="Widget.RS.Button.Primary" parent="Widget.Material3.Button">
+        <item name="android:minHeight">@dimen/cta_height</item>
+        <item name="android:textSize">@dimen/type_h3</item>
+        <item name="android:textColor">@color/text_on_accent</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="backgroundTint">@color/accent</item>
+        <item name="cornerRadius">@dimen/radius_control</item>
+        <item name="rippleColor">@color/ripple_light</item>
+    </style>
+
+    <style name="Widget.RS.Button.Safe" parent="Widget.Material3.Button">
+        <item name="android:minHeight">@dimen/cta_height</item>
+        <item name="android:textSize">@dimen/type_h2</item>
+        <item name="android:textColor">@color/text_on_safe</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="backgroundTint">@color/safe_button</item>
+        <item name="cornerRadius">@dimen/radius_control</item>
+        <item name="rippleColor">@color/ripple_light</item>
+    </style>
+
+    <style name="Widget.RS.Button.Danger" parent="Widget.Material3.Button">
+        <item name="android:minHeight">@dimen/touch_min</item>
+        <item name="android:textSize">@dimen/type_h3</item>
+        <item name="android:textColor">@color/text_on_danger</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="backgroundTint">@color/sos_button</item>
+        <item name="cornerRadius">@dimen/radius_control</item>
+        <item name="rippleColor">@color/ripple_light</item>
+    </style>
+
+    <style name="Widget.RS.Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">@dimen/touch_min</item>
+        <item name="android:textSize">@dimen/type_h3</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="backgroundTint">@color/surface_raised</item>
+        <item name="strokeColor">@color/hairline_default</item>
+        <item name="strokeWidth">@dimen/hairline</item>
+        <item name="cornerRadius">@dimen/radius_control</item>
+        <item name="rippleColor">@color/ripple_light</item>
+    </style>
+
+    <!--
+        IconButton must set iconTint explicitly: when a parent applies a plain
+        background tint (e.g. bg_surface), Material resolves the default icon
+        tint against that tinted background and renders a magenta button.
+    -->
+    <style name="Widget.RS.IconButton" parent="Widget.Material3.Button.IconButton">
+        <item name="android:layout_width">@dimen/icon_button</item>
+        <item name="android:layout_height">@dimen/icon_button</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="iconTint">@color/text_secondary</item>
+        <item name="iconTintMode">src_in</item>
+        <item name="rippleColor">@color/ripple_light</item>
+    </style>
+
+    <style name="Widget.RS.TextField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/surface_sunken</item>
+        <item name="boxStrokeColor">@color/accent</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxCornerRadiusTopStart">@dimen/radius_control</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/radius_control</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/radius_control</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/radius_control</item>
+        <item name="hintTextColor">@color/text_muted</item>
+    </style>
+
+    <style name="Widget.RS.Chip" parent="Widget.Material3.Chip.Assist">
+        <item name="chipBackgroundColor">@color/surface_overlay</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="chipStrokeColor">@color/hairline_default</item>
+        <item name="chipStrokeWidth">@dimen/hairline</item>
+    </style>
+
+    <style name="Widget.RS.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/surface_base</item>
+        <item name="titleTextColor">@color/text_primary</item>
+        <item name="subtitleTextColor">@color/text_muted</item>
+    </style>
+</resources>

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RakshaSetu</string>
+    <string name="default_country_code">+91</string>
+    <string name="permission_warning">Missing %1$s — the SOS alert cannot send without it.</string>
+    <string name="onboarding_step">%1$d of %2$d</string>
+    <string name="calibration_count">%1$d/6</string>
+    <string name="calibration_threshold">Threshold  %1$d</string>
+    <string name="calibration_sensitivity">Sensitivity  %1$s</string>
+    <string name="location_on">Location services are on</string>
+    <string name="location_off">Location services are off</string>
+    <plurals name="contact_count">
+        <item quantity="one">%d emergency contact</item>
+        <item quantity="other">%d emergency contacts</item>
+    </plurals>
     <string name="accessibility_service_description">RakshaSetu uses this service to detect volume button presses for emergency SOS triggers from the lock screen. This service does NOT collect, store, or transmit any data. It only detects when Volume Up and Volume Down buttons are pressed together.</string>
 
     <!-- Notifications -->
@@ -57,10 +69,11 @@
     <string name="countdown_cancel_hint">Tap to cancel • Long press for duress cancel</string>
 
     <!-- Main -->
-    <string name="main_safety_active">✅ Safety monitoring active</string>
-    <string name="main_safety_inactive">⚠️ Safety monitoring inactive</string>
-    <string name="main_accessibility_enabled">✅ Volume button trigger enabled</string>
-    <string name="main_accessibility_disabled">⚠️ Volume button trigger disabled</string>
+    <string name="main_safety_active">Safety monitoring active</string>
+    <string name="main_safety_inactive">Safety monitoring inactive</string>
+    <string name="main_accessibility_enabled">Volume button trigger enabled</string>
+    <string name="main_accessibility_disabled">Volume button trigger disabled</string>
+    <string name="warning_no_contacts">Add at least one emergency contact before triggering SOS.</string>
     <string name="main_enable_accessibility">Enable Volume Trigger</string>
     <string name="main_manage_contacts">Contacts</string>
     <string name="main_settings">Settings</string>

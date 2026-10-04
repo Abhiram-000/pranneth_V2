@@ -56,8 +56,8 @@ class CalibrationActivity : AppCompatActivity(), CalibrationHelper.CalibrationLi
         binding.tvTitle.text = "Guided Calibration"
         binding.tvSubtitle.text = "Practice your emergency gestures so we can tune the sensitivity for your phone"
         binding.tvInstruction.text = "We'll start with the SHAKE gesture.\n\nHold your phone the way you normally would (in hand, pocket, or bag), then shake it firmly when prompted."
-        binding.btnStartCalibration.text = "Start Shake Calibration"
-        binding.tvProgress.text = "Step 1 of 2"
+        binding.btnStartCalibration.text = "Start shake calibration"
+        binding.tvProgress.text = "0/6"
         binding.progressIndicator.progress = 0
         binding.layoutResult.visibility = android.view.View.GONE
         binding.layoutInstructions.visibility = android.view.View.VISIBLE
@@ -67,10 +67,10 @@ class CalibrationActivity : AppCompatActivity(), CalibrationHelper.CalibrationLi
         currentStep = 1
         binding.tvTitle.text = "Shake Calibration"
         binding.tvSubtitle.text = "Shake your phone firmly 3-5 times"
-        binding.tvInstruction.text = "🔴 SHAKE NOW!\n\nShake your phone the way you would in an emergency.\nYou have 10 seconds."
+        binding.tvInstruction.text = "SHAKE NOW\n\nShake the phone the way you would in a real emergency. You have ten seconds."
         binding.btnStartCalibration.isEnabled = false
-        binding.tvProgress.text = "Step 1 of 2 — In Progress"
-        binding.progressIndicator.progress = 25
+        binding.tvProgress.text = getString(R.string.calibration_count, 0)
+        binding.progressIndicator.progress = 0
 
         vibratePattern(longArrayOf(0, 100, 50, 100, 50, 200))
         calibrationHelper.startCalibration()
@@ -80,20 +80,21 @@ class CalibrationActivity : AppCompatActivity(), CalibrationHelper.CalibrationLi
         currentStep = 2
         binding.tvTitle.text = "Volume Button Calibration"
         binding.tvSubtitle.text = "Press Volume Up + Volume Down together"
-        binding.tvInstruction.text = "🔴 PRESS VOLUME BUTTONS!\n\nPress both Volume Up and Volume Down buttons at the same time, 3 times.\n\nThis tests the lock-screen trigger."
-        binding.btnStartCalibration.text = "I'm Done"
-        binding.progressIndicator.progress = 50
+        binding.tvInstruction.text = "PRESS BOTH VOLUME BUTTONS\n\nPress Volume Up and Volume Down together, three times. This is the same gesture that triggers SOS from the lock screen."
+        binding.btnStartCalibration.text = "Done"
+        binding.progressIndicator.progress = 100
 
         vibratePattern(longArrayOf(0, 100, 50, 100))
     }
 
     private fun finishCalibration() {
         currentStep = 3
-        binding.tvTitle.text = "Calibration Complete!"
-        binding.tvSubtitle.text = "Your gestures have been tuned for your device"
+        binding.tvTitle.text = "Calibration complete"
+        binding.tvSubtitle.text = "Your gestures are tuned for this phone and grip"
         binding.layoutInstructions.visibility = android.view.View.GONE
         binding.layoutResult.visibility = android.view.View.VISIBLE
-        binding.btnStartCalibration.text = "Save & Finish"
+        binding.btnStartCalibration.text = "Save and finish"
+        binding.tvProgress.text = getString(R.string.calibration_count, 6)
         binding.progressIndicator.progress = 100
 
         vibratePattern(longArrayOf(0, 200, 100, 200))
@@ -125,10 +126,10 @@ class CalibrationActivity : AppCompatActivity(), CalibrationHelper.CalibrationLi
             )
         }
 
-        binding.tvCalibrationStatus.text = "✅ Shake calibration successful!"
-        binding.tvCalibrationStatus.setTextColor(getColor(R.color.status_active))
-        binding.tvResultThreshold.text = "Recommended threshold: ${recommendedThreshold.toInt()}"
-        binding.tvResultSensitivity.text = "Recommended sensitivity: $recommendedSensitivity"
+        binding.tvCalibrationStatus.text = "Shake calibration successful"
+        binding.tvCalibrationStatus.setTextColor(getColor(R.color.success_green))
+        binding.tvResultThreshold.text = getString(R.string.calibration_threshold, recommendedThreshold.toInt())
+        binding.tvResultSensitivity.text = getString(R.string.calibration_sensitivity, recommendedSensitivity)
 
         // Move to volume calibration
         lifecycleScope.launch {
@@ -138,7 +139,7 @@ class CalibrationActivity : AppCompatActivity(), CalibrationHelper.CalibrationLi
     }
 
     override fun onCalibrationError(error: String) {
-        binding.tvCalibrationStatus.text = "⚠️ $error"
+        binding.tvCalibrationStatus.text = error
         binding.tvCalibrationStatus.setTextColor(getColor(R.color.warning))
         binding.btnStartCalibration.isEnabled = true
     }

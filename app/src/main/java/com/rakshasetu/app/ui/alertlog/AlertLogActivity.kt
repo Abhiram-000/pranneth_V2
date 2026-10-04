@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,12 +40,10 @@ class AlertLogActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             alertRepository.getRecentAlerts(100).collectLatest { alerts ->
-                if (alerts.isEmpty()) {
-                    binding.tvEmpty.visibility = View.VISIBLE
-                    binding.recyclerView.visibility = View.GONE
-                } else {
-                    binding.tvEmpty.visibility = View.GONE
-                    binding.recyclerView.visibility = View.VISIBLE
+                // Toggle the whole empty-state block (icon + copy), not just text.
+                binding.layoutEmpty.visibility = if (alerts.isEmpty()) View.VISIBLE else View.GONE
+                binding.recyclerView.visibility = if (alerts.isEmpty()) View.GONE else View.VISIBLE
+                if (alerts.isNotEmpty()) {
                     binding.recyclerView.adapter = AlertLogAdapter(alerts)
                 }
             }
@@ -75,35 +74,39 @@ class AlertLogActivity : AppCompatActivity() {
             val alert = alerts[position]
 
             holder.tvTriggerType.text = when (alert.triggerType) {
-                AlertLog.TRIGGER_SHAKE -> "📱 Shake Trigger"
-                AlertLog.TRIGGER_VOLUME -> "🔊 Volume Button"
-                AlertLog.TRIGGER_MANUAL -> "👆 Manual SOS"
-                AlertLog.TRIGGER_NOTIFICATION -> "🔔 Notification"
-                AlertLog.TRIGGER_AIRPLANE -> "✈️ Airplane Mode"
-                else -> "❓ Unknown"
+                AlertLog.TRIGGER_SHAKE -> "Shake"
+                AlertLog.TRIGGER_VOLUME -> "Volume buttons"
+                AlertLog.TRIGGER_MANUAL -> "Manual SOS"
+                AlertLog.TRIGGER_NOTIFICATION -> "Lock screen SOS"
+                AlertLog.TRIGGER_AIRPLANE -> "Airplane mode"
+                else -> "Unknown"
             }
 
             holder.tvTime.text = dateFormat.format(Date(alert.startedAt))
 
             holder.tvLocation.text = if (alert.latitude != null && alert.longitude != null) {
-                "📍 ${String.format("%.4f, %.4f", alert.latitude, alert.longitude)}" +
-                    if (alert.accuracy != null) " (±${alert.accuracy.toInt()}m)" else ""
+                String.format("%.4f, %.4f", alert.latitude, alert.longitude) +
+                    if (alert.accuracy != null) "  ±${alert.accuracy.toInt()}m" else ""
             } else {
-                "📍 Location not available"
+                "no location"
             }
 
-            holder.tvStatus.text = when {
-                alert.isCancelled -> "❌ Cancelled"
-                alert.isDuress -> "⚠️ Duress Alert"
-                alert.endedAt != null -> "✅ Completed"
-                else -> "🔴 Active"
+            // Status is a word, not an emoji — it must read with TalkBack and
+            // stay legible for anyone who can't distinguish the status colours.
+            val (statusText, statusColor) = when {
+                alert.isCancelled -> "CANCELLED" to R.color.text_muted
+                alert.isDuress -> "DURESS" to R.color.warning
+                alert.endedAt != null -> "COMPLETED" to R.color.success_green
+                else -> "ACTIVE" to R.color.sos_button
             }
+            holder.tvStatus.text = statusText
+            holder.tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.context, statusColor))
 
             holder.tvStats.text = buildString {
-                append("SMS: ${alert.smsSentCount}")
-                append(" | Calls: ${alert.callsMadeCount}")
-                if (alert.isEscalated) append(" | ⬆️ Escalated")
-                alert.batteryLevel?.let { append(" | 🔋 $it%") }
+                append("SMS ${alert.smsSentCount}")
+                append("  ·  Calls ${alert.callsMadeCount}")
+                if (alert.isEscalated) append("  ·  Escalated")
+                alert.batteryLevel?.let { append("  ·  ${it}%") }
             }
         }
 

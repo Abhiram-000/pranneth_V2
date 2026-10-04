@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="spacing_xs">4dp</dimen>
-    <dimen name="spacing_sm">8dp</dimen>
-    <dimen name="spacing_md">16dp</dimen>
-    <dimen name="spacing_lg">24dp</dimen>
-    <dimen name="spacing_xl">32dp</dimen>
+    <!-- ===== SPACING: 4dp grid ===== -->
+    <dimen name="space_1">4dp</dimen>
+    <dimen name="space_2">8dp</dimen>
+    <dimen name="space_3">12dp</dimen>
+    <dimen name="space_4">16dp</dimen>
+    <dimen name="space_5">20dp</dimen>
+    <dimen name="space_6">24dp</dimen>
+    <dimen name="space_8">32dp</dimen>
+    <dimen name="space_10">40dp</dimen>
+    <dimen name="space_12">48dp</dimen>
 
-    <dimen name="sos_button_height">160dp</dimen>
-    <dimen name="countdown_text_size">96sp</dimen>
-    <dimen name="countdown_icon_size">72sp</dimen>
+    <!-- ===== SCREEN GUTTERS ===== -->
+    <dimen name="gutter">20dp</dimen>
 
-    <dimen name="card_corner_radius">12dp</dimen>
-    <dimen name="card_elevation">2dp</dimen>
+    <!-- ===== RADII (hierarchy: sheet > card > control > chip) ===== -->
+    <dimen name="radius_sheet">28dp</dimen>
+    <dimen name="radius_card">20dp</dimen>
+    <dimen name="radius_control">16dp</dimen>
+    <dimen name="radius_chip">999dp</dimen>
+    <dimen name="hairline">1dp</dimen>
 
-    <dimen name="text_size_title">24sp</dimen>
-    <dimen name="text_size_subtitle">18sp</dimen>
-    <dimen name="text_size_body">14sp</dimen>
-    <dimen name="text_size_caption">12sp</dimen>
+    <!-- ===== TOUCH ===== -->
+    <dimen name="touch_min">48dp</dimen>
+    <dimen name="icon_button">48dp</dimen>
+
+    <!-- ===== TYPE SCALE ===== -->
+    <dimen name="type_display">84sp</dimen>
+    <dimen name="type_h1">28sp</dimen>
+    <dimen name="type_h2">20sp</dimen>
+    <dimen name="type_h3">17sp</dimen>
+    <dimen name="type_body">15sp</dimen>
+    <dimen name="type_label">12sp</dimen>
+    <dimen name="type_data">13sp</dimen>
+
+    <!-- ===== COMPONENTS ===== -->
+    <dimen name="sos_target_size">220dp</dimen>
+    <dimen name="cta_height">60dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="status_strip_height">56dp</dimen>
+    <dimen name="quick_tile_height">76dp</dimen>
 </resources>
