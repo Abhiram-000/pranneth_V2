@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/countdown_background">
+
+    <!-- ============ VISIBLE COUNTDOWN (default) ============ -->
+    <LinearLayout
+        android:id="@+id/layoutCountdownVisual"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/gutter"
+        android:paddingTop="@dimen/space_10"
+        android:paddingBottom="@dimen/space_8">
+
+        <TextView
+            android:id="@+id/tvTriggerSource"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+        <!-- Countdown numeral: the entire screen's focal point -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tvCountdownNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-black"
+                android:includeFontPadding="false"
+                android:text="7"
+                android:textColor="@color/countdown_text"
+                android:textSize="@dimen/type_display" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="@dimen/space_10"
+                android:text="seconds until contacts are alerted"
+                android:textAppearance="@style/TextAppearance.RS.Body" />
+        </FrameLayout>
+
+        <!-- Location readiness (secondary, must never outshout the CTA) -->
+        <TextView
+            android:id="@+id/tvLocationStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_4"
+            android:gravity="center"
+            android:text="Acquiring GPS fix…"
+            android:textAppearance="@style/TextAppearance.RS.Data" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSafe"
+            style="@style/Widget.RS.Button.Safe"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:text="I'm safe — cancel" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_3"
+            android:gravity="center"
+            android:text="Cancel any time before the timer ends"
+            android:textAppearance="@style/TextAppearance.RS.Body" />
+    </LinearLayout>
+
+    <!-- ============ SILENT COUNTDOWN (covert mode: dim, quiet, no flash) ============ -->
+    <LinearLayout
+        android:id="@+id/layoutSilentVisual"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.55"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/gutter"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Silent countdown"
+            android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+        <TextView
+            android:id="@+id/tvSilentCountdownNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_4"
+            android:fontFamily="sans-serif-light"
+            android:includeFontPadding="false"
+            android:text="30"
+            android:textColor="@color/countdown_text"
+            android:textSize="56sp" />
+
+        <TextView
+            android:id="@+id/tvSilentCountdownHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_4"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.RS.Body" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSilentCancel"
+            style="@style/Widget.RS.Button.Secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:text="Cancel" />
+    </LinearLayout>
+</FrameLayout>

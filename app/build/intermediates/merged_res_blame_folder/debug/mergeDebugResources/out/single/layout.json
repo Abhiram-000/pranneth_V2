@@ -1,0 +1,70 @@
+[
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/item_alert_log.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/item_alert_log.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/page_onboarding_location.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_location.xml"
+    },
+    {
+        "merged": "com.rakshasetu.app-mergeDebugResources-54:/layout/activity_main.xml",
+        "source": "com.rakshasetu.app-main-57:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/page_onboarding_calibration.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_calibration.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/activity_main.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/page_onboarding_welcome.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_welcome.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/page_onboarding_battery.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_battery.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/activity_contact_list.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_contact_list.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/activity_countdown.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_countdown.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/page_onboarding_permissions.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_permissions.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/activity_calibration.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_calibration.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/activity_alert_log.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_alert_log.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/activity_add_contact.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_add_contact.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/activity_settings.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/activity_onboarding.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_onboarding.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/item_contact.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/item_contact.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-mergeDebugResources-54:/layout/page_onboarding_contacts.xml",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_contacts.xml"
+    }
+]

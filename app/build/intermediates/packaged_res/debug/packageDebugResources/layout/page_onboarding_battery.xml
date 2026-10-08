@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/space_2">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Background survival"
+        android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2"
+        android:text="Your phone's battery saver will kill the sensor"
+        android:textAppearance="@style/TextAppearance.RS.H1" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_3"
+        android:text="On most phones, especially Xiaomi, Vivo, Oppo and Realme, the OS stops background apps after a few hours. Two minutes of setup keeps shake detection alive."
+        android:textAppearance="@style/TextAppearance.RS.Body" />
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.RS.Card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_4">
+
+            <TextView
+                android:id="@+id/tvManufacturer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.RS.Eyebrow"
+                android:textColor="@color/accent" />
+
+            <TextView
+                android:id="@+id/tvBatterySteps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_2"
+                android:lineSpacingMultiplier="1.35"
+                android:textAppearance="@style/TextAppearance.RS.Body" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

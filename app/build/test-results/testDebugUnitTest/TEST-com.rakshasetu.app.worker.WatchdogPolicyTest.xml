@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rakshasetu.app.worker.WatchdogPolicyTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:46:36" hostname="Abhi" time="0.001">
+  <properties/>
+  <testcase name="does not restart when monitoring intentionally off" classname="com.rakshasetu.app.worker.WatchdogPolicyTest" time="0.001"/>
+  <testcase name="restarts when service not running and monitoring expected on" classname="com.rakshasetu.app.worker.WatchdogPolicyTest" time="0.0"/>
+  <testcase name="stale heartbeat means sensors likely dead even if service object exists" classname="com.rakshasetu.app.worker.WatchdogPolicyTest" time="0.0"/>
+  <testcase name="does not report dead when running" classname="com.rakshasetu.app.worker.WatchdogPolicyTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

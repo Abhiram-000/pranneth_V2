@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rakshasetu.app.domain.PermissionWarningPolicyTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:46:35" hostname="Abhi" time="0.008">
+  <properties/>
+  <testcase name="missing any critical permission shows warning" classname="com.rakshasetu.app.domain.PermissionWarningPolicyTest" time="0.006"/>
+  <testcase name="nothing missing means no warning" classname="com.rakshasetu.app.domain.PermissionWarningPolicyTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

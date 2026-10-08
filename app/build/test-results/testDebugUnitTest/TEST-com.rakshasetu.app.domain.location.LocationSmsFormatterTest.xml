@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rakshasetu.app.domain.location.LocationSmsFormatterTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:46:35" hostname="Abhi" time="0.02">
+  <properties/>
+  <testcase name="gps fix includes coordinates and accuracy" classname="com.rakshasetu.app.domain.location.LocationSmsFormatterTest" time="0.017"/>
+  <testcase name="null location reports unavailable" classname="com.rakshasetu.app.domain.location.LocationSmsFormatterTest" time="0.002"/>
+  <testcase name="network fix is labelled as estimate" classname="com.rakshasetu.app.domain.location.LocationSmsFormatterTest" time="0.001"/>
+  <testcase name="gps fix is not labelled network" classname="com.rakshasetu.app.domain.location.LocationSmsFormatterTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

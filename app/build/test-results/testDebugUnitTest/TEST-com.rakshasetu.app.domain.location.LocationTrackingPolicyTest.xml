@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rakshasetu.app.domain.location.LocationTrackingPolicyTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:46:35" hostname="Abhi" time="0.001">
+  <properties/>
+  <testcase name="zero interval yields no ticks" classname="com.rakshasetu.app.domain.location.LocationTrackingPolicyTest" time="0.001"/>
+  <testcase name="tick times respect interval and stop at duration cap" classname="com.rakshasetu.app.domain.location.LocationTrackingPolicyTest" time="0.0"/>
+  <testcase name="never fires past the duration cap" classname="com.rakshasetu.app.domain.location.LocationTrackingPolicyTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

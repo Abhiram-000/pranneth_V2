@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient_dark"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/gutter"
+        android:paddingTop="@dimen/space_8"
+        android:paddingBottom="@dimen/space_8">
+
+        <!-- ============ MASTHEAD: eyebrow + wordmark ============ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Personal safety"
+                    android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_1"
+                    android:text="RakshaSetu"
+                    android:textAppearance="@style/TextAppearance.RS.H1" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnAlertHistory"
+                android:layout_width="@dimen/icon_button"
+                android:layout_height="@dimen/icon_button"
+                android:background="@drawable/bg_surface"
+                android:contentDescription="@string/cd_alert_history"
+                android:padding="@dimen/space_3"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_history"
+                app:tint="@color/text_secondary" />
+        </LinearLayout>
+
+        <!-- ============ STATUS STRIP: dot + label + data ============ -->
+        <LinearLayout
+            android:id="@+id/layoutWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_5"
+            android:background="@drawable/bg_surface"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/status_strip_height"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/space_4"
+            android:paddingVertical="@dimen/space_3">
+
+            <View
+                android:id="@+id/dotService"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/bg_dot_idle" />
+
+            <TextView
+                android:id="@+id/tvServiceStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_3"
+                android:layout_weight="1"
+                android:text="Monitoring off"
+                android:textAppearance="@style/TextAppearance.RS.H3" />
+
+            <TextView
+                android:id="@+id/tvBatteryStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_3"
+                android:maxWidth="128dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:gravity="end"
+                android:textAppearance="@style/TextAppearance.RS.Data" />
+        </LinearLayout>
+
+        <!-- ============ WARNING (permission/accessibility) ============ -->
+        <TextView
+            android:id="@+id/tvWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_3"
+            android:background="@drawable/bg_surface"
+            android:paddingHorizontal="@dimen/space_4"
+            android:paddingVertical="@dimen/space_3"
+            android:textAppearance="@style/TextAppearance.RS.Body"
+            android:textColor="@color/warning"
+            android:visibility="gone" />
+
+        <!-- ============ SOS TARGET (the memorable element) ============ -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_8"
+            android:minHeight="@dimen/sos_target_size">
+
+            <TextView
+                android:id="@+id/btnSos"
+                android:layout_width="@dimen/sos_target_size"
+                android:layout_height="@dimen/sos_target_size"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_sos_target"
+                android:contentDescription="@string/cd_sos"
+                android:focusable="true"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:letterSpacing="0.06"
+                android:stateListAnimator="@animator/sos_press"
+                android:text="SOS"
+                android:textColor="@color/text_on_danger"
+                android:textSize="40sp" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_4"
+            android:gravity="center"
+            android:text="Tap to start the countdown"
+            android:textAppearance="@style/TextAppearance.RS.Body" />
+
+        <!-- ============ READINESS ============ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_6"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+                <TextView
+                    android:id="@+id/tvLocationStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Checking…"
+                    android:textAppearance="@style/TextAppearance.RS.Data" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/hairline"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/space_4"
+                android:background="@color/hairline_default" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contacts"
+                    android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+                <TextView
+                    android:id="@+id/tvContactCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_1"
+                    android:text="0 contacts"
+                    android:textAppearance="@style/TextAppearance.RS.Data" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ============ ACCESSIBILITY TRIGGER ============ -->
+        <TextView
+            android:id="@+id/tvAccessibilityStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_4"
+            android:background="@drawable/bg_pill"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="@dimen/space_4"
+            android:paddingVertical="@dimen/space_3"
+            android:text="Volume-button trigger off"
+            android:textAppearance="@style/TextAppearance.RS.Body" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEnableAccessibility"
+            style="@style/Widget.RS.Button.Secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_2"
+            android:text="Enable volume trigger" />
+
+        <!-- ============ QUICK ACTIONS (thumb-zone tiles) ============ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_8"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/btnManageContacts"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/quick_tile_height"
+                android:layout_marginEnd="@dimen/space_2"
+                android:layout_weight="1"
+                android:background="@drawable/bg_surface"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_contacts"
+                    app:tint="@color/accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_2"
+                    android:text="Contacts"
+                    android:textAppearance="@style/TextAppearance.RS.H3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnCalibration"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/quick_tile_height"
+                android:layout_marginHorizontal="@dimen/space_2"
+                android:layout_weight="1"
+                android:background="@drawable/bg_surface"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_calibrate"
+                    app:tint="@color/accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_2"
+                    android:text="Calibrate"
+                    android:textAppearance="@style/TextAppearance.RS.H3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnSettings"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/quick_tile_height"
+                android:layout_marginStart="@dimen/space_2"
+                android:layout_weight="1"
+                android:background="@drawable/bg_surface"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_settings"
+                    app:tint="@color/accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_2"
+                    android:text="Settings"
+                    android:textAppearance="@style/TextAppearance.RS.H3" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ============ EMERGENCY LINE ============ -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCall112"
+            style="@style/Widget.RS.Button.Danger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_4"
+            android:text="Call 112 now" />
+    </LinearLayout>
+</ScrollView>

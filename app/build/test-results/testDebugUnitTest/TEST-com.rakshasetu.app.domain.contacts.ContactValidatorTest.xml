@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rakshasetu.app.domain.contacts.ContactValidatorTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:46:35" hostname="Abhi" time="0.016">
+  <properties/>
+  <testcase name="ten digit Indian number is accepted with default country code" classname="com.rakshasetu.app.domain.contacts.ContactValidatorTest" time="0.013"/>
+  <testcase name="short phone number is rejected" classname="com.rakshasetu.app.domain.contacts.ContactValidatorTest" time="0.001"/>
+  <testcase name="relation Other requires custom relation" classname="com.rakshasetu.app.domain.contacts.ContactValidatorTest" time="0.0"/>
+  <testcase name="country code must start with plus" classname="com.rakshasetu.app.domain.contacts.ContactValidatorTest" time="0.001"/>
+  <testcase name="name is required" classname="com.rakshasetu.app.domain.contacts.ContactValidatorTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

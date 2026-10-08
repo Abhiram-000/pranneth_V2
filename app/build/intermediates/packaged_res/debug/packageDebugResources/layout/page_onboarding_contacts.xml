@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/space_2">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Who gets alerted"
+        android:textAppearance="@style/TextAppearance.RS.Eyebrow" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2"
+        android:text="Add three to five people"
+        android:textAppearance="@style/TextAppearance.RS.H1" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_3"
+        android:text="They are messaged in order. If the first person doesn't respond within 30 seconds, the alert moves to the next."
+        android:textAppearance="@style/TextAppearance.RS.Body" />
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.RS.Card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_4">
+
+            <TextView
+                android:id="@+id/tvContactCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 added"
+                android:textAppearance="@style/TextAppearance.RS.H2" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_1"
+                android:text="Contacts can be added now or any time from the home screen."
+                android:textAppearance="@style/TextAppearance.RS.Body" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rakshasetu.app.ui.countdown.CountdownPolicyTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:46:36" hostname="Abhi" time="0.001">
+  <properties/>
+  <testcase name="policy exposes countdown flag semantics" classname="com.rakshasetu.app.ui.countdown.CountdownPolicyTest" time="0.001"/>
+  <testcase name="visible countdown vibrates and flashes, not dimmed" classname="com.rakshasetu.app.ui.countdown.CountdownPolicyTest" time="0.0"/>
+  <testcase name="silent countdown is quiet and dimmed" classname="com.rakshasetu.app.ui.countdown.CountdownPolicyTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

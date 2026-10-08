@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rakshasetu.app.service.TriggerLauncherPolicyTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:46:36" hostname="Abhi" time="0.001">
+  <properties/>
+  <testcase name="no exception means activity started — no fallback" classname="com.rakshasetu.app.service.TriggerLauncherPolicyTest" time="0.0"/>
+  <testcase name="any activity-launch failure needs fallback notification" classname="com.rakshasetu.app.service.TriggerLauncherPolicyTest" time="0.001"/>
+  <testcase name="background-start restriction on API 31+ needs full-screen fallback" classname="com.rakshasetu.app.service.TriggerLauncherPolicyTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

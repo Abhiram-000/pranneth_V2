@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rakshasetu.app.domain.sms.SmsRetrySchedulerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:46:35" hostname="Abhi" time="0.003">
+  <properties/>
+  <testcase name="retry plan is exponential backoff 10s 30s 90s" classname="com.rakshasetu.app.domain.sms.SmsRetrySchedulerTest" time="0.002"/>
+  <testcase name="single sim devices stay on primary" classname="com.rakshasetu.app.domain.sms.SmsRetrySchedulerTest" time="0.0"/>
+  <testcase name="after all primary retries fail switch to secondary sim" classname="com.rakshasetu.app.domain.sms.SmsRetrySchedulerTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rakshasetu.app.util.OEMHelperTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:46:36" hostname="Abhi" time="0.003">
+  <properties/>
+  <testcase name="redmi maps to xiaomi guide" classname="com.rakshasetu.app.util.OEMHelperTest" time="0.002"/>
+  <testcase name="xiaomi gets autostart instructions" classname="com.rakshasetu.app.util.OEMHelperTest" time="0.0"/>
+  <testcase name="samsung gets own guide" classname="com.rakshasetu.app.util.OEMHelperTest" time="0.0"/>
+  <testcase name="unknown oem gets generic guide instead of empty" classname="com.rakshasetu.app.util.OEMHelperTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

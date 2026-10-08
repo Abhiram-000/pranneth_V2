@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rakshasetu.app.util.SmsVerificationHelperFormatTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:46:36" hostname="Abhi" time="0.003">
+  <properties/>
+  <testcase name="missing location says unavailable" classname="com.rakshasetu.app.util.SmsVerificationHelperFormatTest" time="0.001"/>
+  <testcase name="gps fix is not called network estimate" classname="com.rakshasetu.app.util.SmsVerificationHelperFormatTest" time="0.001"/>
+  <testcase name="network estimate is labelled in emergency sms" classname="com.rakshasetu.app.util.SmsVerificationHelperFormatTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

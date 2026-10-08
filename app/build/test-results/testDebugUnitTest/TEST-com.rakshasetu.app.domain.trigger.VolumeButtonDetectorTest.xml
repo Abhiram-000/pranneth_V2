@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rakshasetu.app.domain.trigger.VolumeButtonDetectorTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:46:35" hostname="Abhi" time="0.452">
+  <properties/>
+  <testcase name="holding both buttons does not re-fire" classname="com.rakshasetu.app.domain.trigger.VolumeButtonDetectorTest" time="0.001"/>
+  <testcase name="immediate re-arm is blocked by cooldown" classname="com.rakshasetu.app.domain.trigger.VolumeButtonDetectorTest" time="0.0"/>
+  <testcase name="both buttons within window fires once" classname="com.rakshasetu.app.domain.trigger.VolumeButtonDetectorTest" time="0.05"/>
+  <testcase name="keys too far apart do not fire" classname="com.rakshasetu.app.domain.trigger.VolumeButtonDetectorTest" time="0.4"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

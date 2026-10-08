@@ -1,0 +1,210 @@
+[
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_page_onboarding_location.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_location.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_edit.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_edit.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_surface.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_surface.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_activity_alert_log.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_alert_log.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_glow_blue.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_glow_blue.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_sos.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_sos.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_gradient_dark.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_gradient_dark.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_glass_primary.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_glass_primary.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_activity_main.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_cancel.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_cancel.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_calibrate.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_calibrate.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_activity_add_contact.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_add_contact.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_activity_contact_list.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_contact_list.xml"
+    },
+    {
+        "merged": "com.rakshasetu.app-debug-55:/layout_activity_main.xml.flat",
+        "source": "com.rakshasetu.app-main-57:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_item_alert_log.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/item_alert_log.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_sos_target_pressed.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_sos_target_pressed.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_contacts.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_contacts.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_page_onboarding_battery.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_battery.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_page_onboarding_welcome.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_welcome.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/xml_accessibility_service_config.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/xml/accessibility_service_config.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_glass_sos.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_glass_sos.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_test.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_test.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_dot_idle.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_dot_idle.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_activity_onboarding.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_onboarding.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_page_onboarding_calibration.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_calibration.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_location.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_location.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_page_onboarding_contacts.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_contacts.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_shield.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_shield.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_pill.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_pill.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_activity_countdown.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_countdown.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_item_contact.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/item_contact.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_glass_sos_card.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_glass_sos_card.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_dot_active.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_dot_active.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_glass_gradient_overlay.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_glass_gradient_overlay.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_sos_glow.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_sos_glow.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_activity_calibration.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_calibration.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_add.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_add.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_glow_orange.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_glow_orange.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_chip.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_chip.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_history.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_history.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/animator_sos_press.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/animator/sos_press.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_activity_settings.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_settings.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_settings.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_glass_status.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_glass_status.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_glass_warning.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_glass_warning.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_back.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_back.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_ic_delete.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/ic_delete.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_glass_card.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_glass_card.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/layout_page_onboarding_permissions.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/layout/page_onboarding_permissions.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-debug-55:/drawable_bg_sos_target.xml.flat",
+        "source": "/home/abhiram/.gradle/daemon/8.9/com.rakshasetu.app-main-57:/drawable/bg_sos_target.xml"
+    }
+]
